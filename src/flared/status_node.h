@@ -18,6 +18,7 @@ public:
 	enum node_status_code {
 		node_status_ok,
 		node_status_storage_error,
+		node_status_thread_error,
 		node_status_unknown_error,
 	};
 
@@ -36,6 +37,8 @@ public:
 			return "";
 		case node_status_storage_error:
 			return "storage error";
+		case node_status_thread_error:
+			return "thread error";
 		case node_status_unknown_error:
 			return "unknown error";
 		}
@@ -48,6 +51,8 @@ private:
 		case node_status_ok:
 			return status_ok;
 		case node_status_storage_error:
+			return status_ng;
+		case node_status_thread_error:
 			return status_ng;
 		case node_status_unknown_error:
 			return status_ng;

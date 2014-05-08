@@ -114,7 +114,11 @@ int op_set::_run_server() {
 
 	// storage i/o
 	storage::result r_storage;
-	if (this->_storage->set(this->_entry, r_storage, this->_behavior) < 0) {
+	storage_access_info info = {};
+	storage_access_watcher_object->notify_begin(this->_thread->get_id(), info);
+	int retcode = this->_storage->set(this->_entry, r_storage, this->_behavior);
+	storage_access_watcher_object->notify_end(this->_thread->get_id());
+	if (retcode < 0) {
 		return this->_send_result(result_server_error, "i/o error");
 	}
 	if (r_storage == storage::result_stored) {

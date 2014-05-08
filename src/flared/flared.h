@@ -20,7 +20,10 @@ namespace flare {
 /**
  *	flared application class
  */
-class flared : public app, public storage_listener {
+class flared :
+	public app,
+	public storage_listener,
+	public time_watcher_listener<storage_access_info> {
 private:
 	server*				_server;
 	thread_pool*	_thread_pool;
@@ -44,6 +47,7 @@ public:
 	storage* get_storage() { return this->_storage; };
 
 	virtual void on_storage_error();
+	virtual void time_watcher_on_over_threshold(const timeval& difference, const storage_access_info& additional_info);
 
 protected:
 	string _get_pid_path();

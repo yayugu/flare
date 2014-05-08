@@ -25,6 +25,7 @@ libflare_la_SOURCES = \
 	handler_monitor.h handler_monitor.cc \
 	handler_proxy.h handler_proxy.cc \
 	handler_reconstruction.h handler_reconstruction.cc \
+	handler_time_watcher_polling.h handler_time_watcher_polling.cc \
 	htonll.h \
 	key_resolver.h key_resolver.cc \
 	key_resolver_modular.h key_resolver_modular.cc \
@@ -88,6 +89,10 @@ libflare_la_SOURCES = \
 	thread_handler.h \
 	thread_pool.h thread_pool.cc \
 	thread_queue.h thread_queue.cc \
+	time_util.h time_util.cc \
+	time_watcher.h time_watcher.cc \
+	time_watcher_listener.h \
+	time_watcher_target_info.h \
 	coordinator.h coordinator.cc \
 	coordinator_factory.h coordinator_factory.cc \
 	file_coordinator.h file_coordinator.cc

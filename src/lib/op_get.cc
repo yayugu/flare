@@ -113,7 +113,11 @@ int op_get::_run_server() {
 		} else {
 			// storage i/o
 			storage::result r_storage;
-			if (this->_storage->get(*it, r_storage) < 0) {
+			storage_access_info info = {};
+			storage_access_watcher_object->notify_begin(this->_thread->get_id(), info);
+			int retcode = this->_storage->get(*it, r_storage);
+			storage_access_watcher_object->notify_end(this->_thread->get_id());
+			if (retcode < 0) {
 				log_warning("storage i/o error (key=%s) -> continue processing (pretending not found)", it->key.c_str());
 				r_map[it->key] = storage::result_not_found;
 				continue;

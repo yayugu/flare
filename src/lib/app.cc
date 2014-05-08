@@ -15,6 +15,7 @@ namespace flare {
 // {{{ global functions/variables
 stats* stats_object = NULL;
 status* status_object = NULL;
+time_watcher<storage_access_info>* storage_access_watcher_object = NULL;
 // }}}
 
 // {{{ ctor/dtor
