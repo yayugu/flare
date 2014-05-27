@@ -49,26 +49,23 @@ void time_watcher<T>::start_polling_thread(
 		uint32_t polling_interval_msec,
 		uint32_t threshold_msec
 ) {
-	shared_thread th = this->_thread_pool.get(thread_pool::thread_type_thread_watch);
+	this->_polling_thread = this->_thread_pool.get(thread_pool::thread_type_thread_watch);
 	handler_time_watcher_polling<T>* handler = new handler_time_watcher_polling<T>(
-			th,
+			this->_polling_thread,
 			*this,
 			listener,
 			time_util::msec_to_timeval(polling_interval_msec),
 			time_util::msec_to_timeval(threshold_msec)
 	);
-	th->trigger(handler);
+	this->_polling_thread->trigger(handler);
 }
 
 template<class T>
 void time_watcher<T>::stop_polling_threads() {
-	thread_pool::local_map m = this->_thread_pool.get_active(thread_pool::thread_type_thread_watch);
-	for (thread_pool::local_map::iterator it = m.begin(); it != m.end(); it++) {
-		it->second->shutdown(
-			true, // graceful
-			true  // async
-		);
-	}
+	this->_polling_thread->shutdown(
+		true, // graceful
+		true  // async
+	);
 }
 
 template class time_watcher<storage_access_info>;

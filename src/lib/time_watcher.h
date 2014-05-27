@@ -22,6 +22,7 @@ protected:
 	target_info_map	_map;
 	pthread_mutex_t	_map_mutex;
 	thread_pool&		_thread_pool;
+	shared_thread		_polling_thread;
 
 public:
 	time_watcher(thread_pool& thread_pool);
