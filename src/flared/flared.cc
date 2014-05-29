@@ -91,7 +91,7 @@ flared::~flared() {
 	delete status_object;
 	status_object = NULL;
 
-	delete storage_access_watcher_object;
+	delete time_watcher_object;
 }
 // }}}
 
@@ -220,12 +220,8 @@ int flared::startup(int argc, char **argv) {
 	handler_alarm* h_alarm = new handler_alarm(th_alarm);
 	th_alarm->trigger(h_alarm);
 
-	storage_access_watcher_object = new time_watcher<storage_access_info>(*this->_thread_pool);
-	storage_access_watcher_object->start_polling_thread(
-			*this,
-			ini_option_object().get_thread_watch_pooling_interval_msec(),
-			ini_option_object().get_thread_watch_threshold_warn_msec()
-	);
+	time_watcher_object = new time_watcher(*this->_thread_pool);
+	time_watcher_object->start_polling_thread(ini_option_object().get_thread_watch_pooling_interval_msec());
 
 #ifdef ENABLE_MYSQL_REPLICATION
 	if (ini_option_object().is_mysql_replication()) {
@@ -341,12 +337,8 @@ int flared::reload() {
 	// noreply_window_limit
 	this->_cluster->set_noreply_window_limit(ini_option_object().get_noreply_window_limit());
 
-	storage_access_watcher_object->stop_polling_threads();
-	storage_access_watcher_object->start_polling_thread(
-			*this,
-			ini_option_object().get_thread_watch_pooling_interval_msec(),
-			ini_option_object().get_thread_watch_threshold_warn_msec()
-	);
+	time_watcher_object->stop_polling_threads();
+	time_watcher_object->start_polling_thread(ini_option_object().get_thread_watch_pooling_interval_msec());
 
 	log_notice("process successfully reloaded", 0);
 
@@ -377,7 +369,7 @@ void flared::on_storage_error() {
 	s->set_node_status_code(status_node::node_status_storage_error);
 }
 
-void flared::time_watcher_on_over_threshold(const timeval& difference, const storage_access_info& additional_info) {
+void flared::storage_access_watcher_on_over_threshold(const timeval& difference, const storage_access_info& additional_info) {
 	log_err("hi", 0);
 }
 // }}}

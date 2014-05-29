@@ -1,6 +1,7 @@
 #ifndef	TIME_WATHCER_H
 #define	TIME_WATHCER_H
 
+#include <boost/function.hpp>
 #include <map>
 #include <stdint.h>
 #include <pthread.h>
@@ -9,14 +10,14 @@
 #include "thread_pool.h"
 
 using namespace std;
+using namespace boost;
 
 namespace gree {
 namespace flare {
 
-template<class T>
 class time_watcher {
 public:
-	typedef map< uint32_t, time_watcher_target_info<T> > target_info_map;
+	typedef map< uint32_t, time_watcher_target_info > target_info_map;
 
 protected:
 	target_info_map	_map;
@@ -27,14 +28,10 @@ protected:
 public:
 	time_watcher(thread_pool& thread_pool);
 	~time_watcher();
-	void notify_begin(uint32_t id, T additional_info);
+	void notify_begin(uint32_t id, boost::function<void(timeval)>);
 	void notify_end(uint32_t id);
-	map< uint32_t, time_watcher_target_info<T> > get_map();
-	void start_polling_thread(
-			time_watcher_listener<T>& listener,
-			uint32_t polling_interval_msec,
-			uint32_t threshold_msec
-	);
+	map< uint32_t, time_watcher_target_info > get_map();
+	void start_polling_thread(uint32_t polling_interval_msec);
 	void stop_polling_threads();
 };
 

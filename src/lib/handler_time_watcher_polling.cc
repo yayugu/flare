@@ -6,27 +6,20 @@
 namespace gree {
 namespace flare {
 
-template<class T>
-handler_time_watcher_polling<T>::handler_time_watcher_polling(
+handler_time_watcher_polling::handler_time_watcher_polling(
 		shared_thread thread,
-		time_watcher<T>& time_watcher,
-		time_watcher_listener<T>& listener,
-		timeval polling_interval,
-		timeval threshold
+		time_watcher& time_watcher,
+		timeval polling_interval
 ):
 		thread_handler(thread),
 		_time_watcher(time_watcher),
-		_listener(listener),
-		_polling_interval(polling_interval),
-		_threshold(threshold) {
+		_polling_interval(polling_interval) {
 }
 
-template<class T>
-handler_time_watcher_polling<T>::~handler_time_watcher_polling() {
+handler_time_watcher_polling::~handler_time_watcher_polling() {
 }
 
-template<class T>
-int handler_time_watcher_polling<T>::run()
+int handler_time_watcher_polling::run()
 {
 	for(;;) {
 		if (this->_thread->is_shutdown_request()) {
@@ -44,31 +37,26 @@ int handler_time_watcher_polling<T>::run()
 	return 0;
 }
 
-template<class T>
-void handler_time_watcher_polling<T>::_check_timestamp(const time_watcher_target_info<T>& info) {
+void handler_time_watcher_polling::_check_timestamp(const time_watcher_target_info& info) {
 	timeval now;
 	timeval sub;
 	gettimeofday(&now, NULL);
 	time_util::timer_sub(now, info.timestamp, sub);
-	if (time_util::timer_is_bigger(sub, this->_threshold)) {
-		_listener.time_watcher_on_over_threshold(sub, info.additional_info);
+	if (time_util::timer_is_bigger(sub, info.threshold)) {
+		info.callback(sub);
 	}
 }
 
-template<class T>
-void handler_time_watcher_polling<T>::_check_timestamps() {
-	typename time_watcher<T>::target_info_map m = this->_time_watcher.get_map();
+void handler_time_watcher_polling::_check_timestamps() {
+	typename time_watcher::target_info_map m = this->_time_watcher.get_map();
 	for (
-			typename time_watcher<T>::target_info_map::const_iterator it = m.begin();
+			typename time_watcher::target_info_map::const_iterator it = m.begin();
 			it != m.end();
 			it++
 	) {
 		this->_check_timestamp(it->second);
 	}
 }
-
-template class handler_time_watcher_polling<storage_access_info>;
-
 
 }	// namespace flare
 }	// namespace gree

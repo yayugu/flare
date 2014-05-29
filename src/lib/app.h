@@ -53,7 +53,6 @@
 #ifdef HAVE_LIBKYOTOCABINET
 #include "storage_kch.h"
 #endif
-#include "storage_access_info.h"
 #include "time_watcher.h"
 
 using namespace std;
@@ -64,7 +63,7 @@ namespace flare {
 
 extern stats* stats_object;
 extern status* status_object;
-extern time_watcher<storage_access_info>* storage_access_watcher_object;
+extern time_watcher* time_watcher_object;
 
 /**
  *	application base class

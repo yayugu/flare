@@ -12,7 +12,7 @@
 #include "ini_option.h"
 #include "stats_node.h"
 #include "status_node.h"
-#include "storage_listener.h"
+#include "storage_access_info.h"
 
 namespace gree {
 namespace flare {
@@ -22,8 +22,7 @@ namespace flare {
  */
 class flared :
 	public app,
-	public storage_listener,
-	public time_watcher_listener<storage_access_info> {
+	public storage_listener {
 private:
 	server*				_server;
 	thread_pool*	_thread_pool;
@@ -47,7 +46,7 @@ public:
 	storage* get_storage() { return this->_storage; };
 
 	virtual void on_storage_error();
-	virtual void time_watcher_on_over_threshold(const timeval& difference, const storage_access_info& additional_info);
+	virtual void storage_access_watcher_on_over_threshold(const timeval& difference, const storage_access_info& additional_info);
 
 protected:
 	string _get_pid_path();

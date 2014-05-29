@@ -9,27 +9,22 @@
 namespace gree {
 namespace flare {
 
-template<class T>
 class handler_time_watcher_polling : public thread_handler {
 protected:
-	time_watcher<T>& _time_watcher;
-	time_watcher_listener<T>& _listener;
+	time_watcher& _time_watcher;
 	timeval							_polling_interval;
-	timeval							_threshold;
 
 public:
 	handler_time_watcher_polling(
 			shared_thread thread,
-			time_watcher<T>& time_watcher,
-			time_watcher_listener<T>& listener,
-			timeval polling_interval,
-			timeval threshold
+			time_watcher& time_watcher,
+			timeval polling_interval
 	);
 	~handler_time_watcher_polling();
 	virtual int run();
 
 protected:
-	void _check_timestamp(const time_watcher_target_info<T>& info);
+	void _check_timestamp(const time_watcher_target_info& info);
 	void _check_timestamps();
 };
 
