@@ -1,4 +1,3 @@
-#include "handler_time_watcher_polling.h"
 #include "storage_access_info.h"
 #include "time_util.h"
 #include "time_watcher.h"
@@ -6,10 +5,11 @@
 namespace gree {
 namespace flare {
 
-time_watcher::time_watcher(thread_pool& thread_pool):
-	_thread_pool(thread_pool) {
+time_watcher::time_watcher() {
 	this->_map.clear();
 	pthread_mutex_init(&this->_map_mutex, NULL);
+	this->_thread.reset();
+	this->_polling.reset();
 }
 
 time_watcher::~time_watcher() {
@@ -37,20 +37,18 @@ void time_watcher::notify_end(uint32_t id) {
 }
 
 void time_watcher::start_polling_thread(uint32_t polling_interval_msec) {
-	this->_polling_thread = this->_thread_pool.get(thread_pool::thread_type_thread_watch);
-	handler_time_watcher_polling* handler = new handler_time_watcher_polling(
-			this->_polling_thread,
+	this->_polling.reset(new time_watcher_polling(
 			*this,
 			time_util::msec_to_timeval(polling_interval_msec)
-	);
-	this->_polling_thread->trigger(handler);
+	));
+	this->_thread.reset(new boost::thread(boost::ref(*this->_polling)));
 }
 
 void time_watcher::stop_polling_threads() {
-	this->_polling_thread->shutdown(
-		true, // graceful
-		true  // async
-	);
+	this->_polling->request_shutdown();
+	this->_thread->detach();
+	this->_thread.reset();
+	this->_polling.reset();
 }
 
 }	// namespace flare

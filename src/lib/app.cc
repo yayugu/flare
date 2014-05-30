@@ -8,6 +8,7 @@
  *	$Id$
  */
 #include "app.h"
+#include "time_watcher.h"
 
 namespace gree {
 namespace flare {

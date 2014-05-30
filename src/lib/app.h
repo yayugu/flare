@@ -53,7 +53,6 @@
 #ifdef HAVE_LIBKYOTOCABINET
 #include "storage_kch.h"
 #endif
-#include "time_watcher.h"
 
 using namespace std;
 using namespace boost;
@@ -63,6 +62,8 @@ namespace flare {
 
 extern stats* stats_object;
 extern status* status_object;
+
+class time_watcher;
 extern time_watcher* time_watcher_object;
 
 /**

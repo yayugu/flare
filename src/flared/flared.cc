@@ -15,6 +15,7 @@
 # include "handler_mysql_replication.h"
 #endif
 #include "show_node.h"
+#include "time_watcher.h"
 
 namespace gree {
 namespace flare {
@@ -220,7 +221,7 @@ int flared::startup(int argc, char **argv) {
 	handler_alarm* h_alarm = new handler_alarm(th_alarm);
 	th_alarm->trigger(h_alarm);
 
-	time_watcher_object = new time_watcher(*this->_thread_pool);
+	time_watcher_object = new time_watcher();
 	time_watcher_object->start_polling_thread(ini_option_object().get_thread_watch_pooling_interval_msec());
 
 #ifdef ENABLE_MYSQL_REPLICATION

@@ -1,4 +1,4 @@
-#include "handler_time_watcher_polling.h"
+#include "time_watcher_polling.h"
 #include "logger.h"
 #include "storage_access_info.h"
 #include "time_util.h"
@@ -6,23 +6,22 @@
 namespace gree {
 namespace flare {
 
-handler_time_watcher_polling::handler_time_watcher_polling(
-		shared_thread thread,
+time_watcher_polling::time_watcher_polling(
 		time_watcher& time_watcher,
 		timeval polling_interval
 ):
-		thread_handler(thread),
 		_time_watcher(time_watcher),
 		_polling_interval(polling_interval) {
+	this->_shutdown_requested = false;
 }
 
-handler_time_watcher_polling::~handler_time_watcher_polling() {
+time_watcher_polling::~time_watcher_polling() {
 }
 
-int handler_time_watcher_polling::run()
+void time_watcher_polling::operator()()
 {
 	for(;;) {
-		if (this->_thread->is_shutdown_request()) {
+		if (this->_shutdown_requested) {
 			log_info("thread shutdown request -> breaking loop");
 			break;
 		}
@@ -34,10 +33,13 @@ int handler_time_watcher_polling::run()
 		this->_check_timestamps();
 		time_util::sleep_timeval(this->_polling_interval);
 	}
-	return 0;
 }
 
-void handler_time_watcher_polling::_check_timestamp(const time_watcher_target_info& info) {
+void time_watcher_polling::request_shutdown() {
+	this->_shutdown_requested = true;
+}
+
+void time_watcher_polling::_check_timestamp(const time_watcher_target_info& info) {
 	timeval now;
 	timeval sub;
 	gettimeofday(&now, NULL);
@@ -47,7 +49,7 @@ void handler_time_watcher_polling::_check_timestamp(const time_watcher_target_in
 	}
 }
 
-void handler_time_watcher_polling::_check_timestamps() {
+void time_watcher_polling::_check_timestamps() {
 	time_watcher::target_info_map m = this->_time_watcher.get_map();
 	for (
 			time_watcher::target_info_map::const_iterator it = m.begin();
@@ -60,4 +62,3 @@ void handler_time_watcher_polling::_check_timestamps() {
 
 }	// namespace flare
 }	// namespace gree
-// vim: foldmethod=marker tabstop=2 shiftwidth=2 autoindent
