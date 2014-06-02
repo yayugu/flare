@@ -1,4 +1,4 @@
-#include "time_watcher_polling.h"
+#include "time_watcher_processor.h"
 #include "logger.h"
 #include "storage_access_info.h"
 #include "time_util.h"
@@ -6,7 +6,7 @@
 namespace gree {
 namespace flare {
 
-time_watcher_polling::time_watcher_polling(
+time_watcher_processor::time_watcher_processor(
 		time_watcher& time_watcher,
 		timeval polling_interval
 ):
@@ -15,10 +15,10 @@ time_watcher_polling::time_watcher_polling(
 	this->_shutdown_requested = false;
 }
 
-time_watcher_polling::~time_watcher_polling() {
+time_watcher_processor::~time_watcher_processor() {
 }
 
-void time_watcher_polling::operator()()
+void time_watcher_processor::operator()()
 {
 	for(;;) {
 		if (this->_shutdown_requested) {
@@ -35,11 +35,11 @@ void time_watcher_polling::operator()()
 	}
 }
 
-void time_watcher_polling::request_shutdown() {
+void time_watcher_processor::request_shutdown() {
 	this->_shutdown_requested = true;
 }
 
-void time_watcher_polling::_check_timestamp(const time_watcher_target_info& info) {
+void time_watcher_processor::_check_timestamp(const time_watcher_target_info& info) {
 	timeval now;
 	timeval sub;
 	gettimeofday(&now, NULL);
@@ -49,7 +49,7 @@ void time_watcher_polling::_check_timestamp(const time_watcher_target_info& info
 	}
 }
 
-void time_watcher_polling::_check_timestamps() {
+void time_watcher_processor::_check_timestamps() {
 	time_watcher::target_info_map m = this->_time_watcher.get_map();
 	for (
 			time_watcher::target_info_map::const_iterator it = m.begin();

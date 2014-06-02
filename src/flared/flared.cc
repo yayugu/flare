@@ -222,7 +222,7 @@ int flared::startup(int argc, char **argv) {
 	th_alarm->trigger(h_alarm);
 
 	time_watcher_object = new time_watcher();
-	time_watcher_object->start_polling_thread(ini_option_object().get_thread_watch_pooling_interval_msec());
+	time_watcher_object->start(ini_option_object().get_thread_watch_pooling_interval_msec());
 
 #ifdef ENABLE_MYSQL_REPLICATION
 	if (ini_option_object().is_mysql_replication()) {
@@ -338,8 +338,8 @@ int flared::reload() {
 	// noreply_window_limit
 	this->_cluster->set_noreply_window_limit(ini_option_object().get_noreply_window_limit());
 
-	time_watcher_object->stop_polling_threads();
-	time_watcher_object->start_polling_thread(ini_option_object().get_thread_watch_pooling_interval_msec());
+	time_watcher_object->stop();
+	time_watcher_object->start(ini_option_object().get_thread_watch_pooling_interval_msec());
 
 	log_notice("process successfully reloaded", 0);
 

@@ -1,5 +1,5 @@
-#ifndef	TIME_WATHCER_POLLING_THREAD_H
-#define	TIME_WATHCER_POLLING_THREAD_H
+#ifndef	TIME_WATHCER_PROCESSOR_H
+#define	TIME_WATHCER_PROCESSOR_H
 
 #include "time_watcher.h"
 #include "time_watcher_target_info.h"
@@ -10,18 +10,18 @@ namespace flare {
 
 class time_watcher;
 
-class time_watcher_polling {
+class time_watcher_processor {
 protected:
 	time_watcher& _time_watcher;
 	timeval				_polling_interval;
 	bool					_shutdown_requested;
 
 public:
-	time_watcher_polling(
+	time_watcher_processor(
 			time_watcher& time_watcher,
 			timeval polling_interval
 	);
-	~time_watcher_polling();
+	~time_watcher_processor();
 	void operator()(); // Callable
 	void request_shutdown();
 

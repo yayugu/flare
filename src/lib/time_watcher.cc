@@ -9,7 +9,7 @@ time_watcher::time_watcher() {
 	this->_map.clear();
 	pthread_mutex_init(&this->_map_mutex, NULL);
 	this->_thread.reset();
-	this->_polling.reset();
+	this->_processor.reset();
 }
 
 time_watcher::~time_watcher() {
@@ -38,19 +38,19 @@ void time_watcher::unregister(uint32_t id) {
 	pthread_mutex_unlock(&this->_map_mutex);
 }
 
-void time_watcher::start_polling_thread(uint32_t polling_interval_msec) {
-	this->_polling.reset(new time_watcher_polling(
+void time_watcher::start(uint32_t polling_interval_msec) {
+	this->_processor.reset(new time_watcher_processor(
 			*this,
 			time_util::msec_to_timeval(polling_interval_msec)
 	));
-	this->_thread.reset(new boost::thread(boost::ref(*this->_polling)));
+	this->_thread.reset(new boost::thread(boost::ref(*this->_processor)));
 }
 
-void time_watcher::stop_polling_threads() {
-	this->_polling->request_shutdown();
+void time_watcher::stop() {
+	this->_processor->request_shutdown();
 	this->_thread->detach();
 	this->_thread.reset();
-	this->_polling.reset();
+	this->_processor.reset();
 }
 
 }	// namespace flare
