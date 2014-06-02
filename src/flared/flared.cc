@@ -369,10 +369,6 @@ void flared::on_storage_error() {
 	status_node* s = dynamic_cast<status_node*>(status_object);
 	s->set_node_status_code(status_node::node_status_storage_error);
 }
-
-void flared::storage_access_watcher_on_over_threshold(const timeval& difference, const storage_access_info& additional_info) {
-	log_err("hi", 0);
-}
 // }}}
 
 // {{{ protected methods

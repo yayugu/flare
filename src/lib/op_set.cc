@@ -11,6 +11,7 @@
 #include "op_set.h"
 #include "queue_proxy_write.h"
 #include "binary_request_header.h"
+#include "time_watcher_observer.h"
 
 namespace gree {
 namespace flare {
@@ -114,10 +115,10 @@ int op_set::_run_server() {
 
 	// storage i/o
 	storage::result r_storage;
-	//storage_access_info info = {};
-	//storage_access_watcher_object->notify_begin(this->_thread->get_id(), info);
+	storage_access_info info = {};
+	time_watcher_observer::register_on_storage_access_no_response_callback(this->_thread->get_id(), info);
 	int retcode = this->_storage->set(this->_entry, r_storage, this->_behavior);
-	//storage_access_watcher_object->notify_end(this->_thread->get_id());
+	time_watcher_observer::unregister_on_storage_access_no_response_callback(this->_thread->get_id());
 	if (retcode < 0) {
 		return this->_send_result(result_server_error, "i/o error");
 	}

@@ -46,7 +46,6 @@ public:
 	storage* get_storage() { return this->_storage; };
 
 	virtual void on_storage_error();
-	virtual void storage_access_watcher_on_over_threshold(const timeval& difference, const storage_access_info& additional_info);
 
 protected:
 	string _get_pid_path();

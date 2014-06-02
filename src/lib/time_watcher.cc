@@ -22,15 +22,17 @@ time_watcher::target_info_map time_watcher::get_map() {
 	return m;
 }
 
-void time_watcher::notify_begin(uint32_t id, boost::function<void(timeval)>) {
+void time_watcher::register_(uint32_t id, timeval threshold, boost::function<void(timeval)> callback) {
 	time_watcher_target_info info;
 	gettimeofday(&info.timestamp, NULL);
+	info.threshold = threshold;
+	info.callback = callback;
 	pthread_mutex_lock(&this->_map_mutex);
 	this->_map[id] = info;
 	pthread_mutex_unlock(&this->_map_mutex);
 }
 
-void time_watcher::notify_end(uint32_t id) {
+void time_watcher::unregister(uint32_t id) {
 	pthread_mutex_lock(&this->_map_mutex);
 	this->_map.erase(id);
 	pthread_mutex_unlock(&this->_map_mutex);

@@ -90,6 +90,7 @@ libflare_la_SOURCES = \
 	thread_queue.h thread_queue.cc \
 	time_util.h time_util.cc \
 	time_watcher.h time_watcher.cc \
+	time_watcher_observer.h time_watcher_observer.cc \
 	time_watcher_polling.h time_watcher_polling.cc \
 	time_watcher_target_info.h \
 	coordinator.h coordinator.cc \
