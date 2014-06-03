@@ -8,7 +8,7 @@
 #ifndef	TIME_UTIL_H
 #define	TIME_UTIL_H
 
-#include <time.h>
+#include <sys/time.h>
 #include <stdint.h>
 
 namespace gree {

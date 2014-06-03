@@ -1,7 +1,7 @@
 #ifndef	TIME_WATHCER_TARGET_INFO_H
 #define	TIME_WATHCER_TARGET_INFO_H
 
-#include <time.h>
+#include <sys/time.h>
 #include <boost/function.hpp>
 
 using namespace boost;

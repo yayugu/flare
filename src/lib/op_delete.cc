@@ -94,9 +94,9 @@ int op_delete::_run_server() {
 	// storage i/o
 	storage::result r_storage;
 	storage_access_info info = {};
-	time_watcher_observer::register_on_storage_access_no_response_callback(this->_thread->get_id(), info);
+	uint64_t tw_id = time_watcher_observer::register_on_storage_access_no_response_callback(info);
 	int retcode = this->_storage->remove(this->_entry, r_storage);
-	time_watcher_observer::unregister_on_storage_access_no_response_callback(this->_thread->get_id());
+	time_watcher_observer::unregister_on_storage_access_no_response_callback(tw_id);
 	if (retcode < 0) {
 		return this->_send_result(result_server_error, "i/o error");
 	}

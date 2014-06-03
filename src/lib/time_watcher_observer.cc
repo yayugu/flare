@@ -10,18 +10,17 @@ void time_watcher_observer::on_storage_access_no_response(const timeval& differe
 	log_err("hi", 0);
 }
 
-void time_watcher_observer::register_on_storage_access_no_response_callback(uint32_t id, storage_access_info info) {
+uint64_t time_watcher_observer::register_on_storage_access_no_response_callback(storage_access_info info) {
 	timeval t;
 	t.tv_sec = 1;
 	t.tv_usec = 0;
-	time_watcher_object->register_(
-		id,
+	return time_watcher_object->register_(
 		t,
 		boost::bind(&time_watcher_observer::on_storage_access_no_response, _1, info)
 	);
 }
 
-void time_watcher_observer::unregister_on_storage_access_no_response_callback(uint32_t id) {
+void time_watcher_observer::unregister_on_storage_access_no_response_callback(uint64_t id) {
 	time_watcher_object->unregister(id);
 }
 

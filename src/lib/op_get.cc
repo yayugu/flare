@@ -115,9 +115,9 @@ int op_get::_run_server() {
 			// storage i/o
 			storage::result r_storage;
 			storage_access_info info = {};
-			time_watcher_observer::register_on_storage_access_no_response_callback(this->_thread->get_id(), info);
+			uint64_t tw_id = time_watcher_observer::register_on_storage_access_no_response_callback(info);
 			int retcode = this->_storage->get(*it, r_storage);
-			time_watcher_observer::unregister_on_storage_access_no_response_callback(this->_thread->get_id());
+			time_watcher_observer::unregister_on_storage_access_no_response_callback(tw_id);
 			if (retcode < 0) {
 				log_warning("storage i/o error (key=%s) -> continue processing (pretending not found)", it->key.c_str());
 				r_map[it->key] = storage::result_not_found;
