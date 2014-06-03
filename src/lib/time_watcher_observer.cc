@@ -14,14 +14,14 @@ uint64_t time_watcher_observer::register_on_storage_access_no_response_callback(
 	timeval t;
 	t.tv_sec = 1;
 	t.tv_usec = 0;
-	return time_watcher_object->register_(
+	return time_watcher_object->register_target(
 		t,
 		boost::bind(&time_watcher_observer::on_storage_access_no_response, _1, info)
 	);
 }
 
 void time_watcher_observer::unregister_on_storage_access_no_response_callback(uint64_t id) {
-	time_watcher_object->unregister(id);
+	time_watcher_object->unregister_target(id);
 }
 
 }	// namespace flare

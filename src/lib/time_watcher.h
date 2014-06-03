@@ -34,8 +34,8 @@ protected:
 public:
 	time_watcher();
 	~time_watcher();
-	uint64_t register_(timeval threshold, boost::function<void(timeval)>);
-	void unregister(uint64_t id);
+	uint64_t register_target(timeval threshold, boost::function<void(timeval)>);
+	void unregister_target(uint64_t id);
 	target_info_map get_map();
 	void start(uint32_t polling_interval_msec);
 	void stop();
