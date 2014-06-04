@@ -115,7 +115,7 @@ int op_set::_run_server() {
 
 	// storage i/o
 	storage::result r_storage;
-	storage_access_info info = {};
+	storage_access_info info = { this->_thread };
 	uint64_t tw_id = time_watcher_observer::register_on_storage_access_no_response_callback(info);
 	int retcode = this->_storage->set(this->_entry, r_storage, this->_behavior);
 	time_watcher_observer::unregister_on_storage_access_no_response_callback(tw_id);

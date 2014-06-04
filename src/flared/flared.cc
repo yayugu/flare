@@ -16,6 +16,7 @@
 #endif
 #include "show_node.h"
 #include "time_watcher.h"
+#include "time_watcher_observer.h"
 
 namespace gree {
 namespace flare {
@@ -223,6 +224,10 @@ int flared::startup(int argc, char **argv) {
 
 	time_watcher_object = new time_watcher();
 	time_watcher_object->start(ini_option_object().get_thread_watch_pooling_interval_msec());
+	time_watcher_observer::set_threshold_warn_msec(ini_option_object().get_thread_watch_threshold_warn_msec());
+	time_watcher_observer::set_threshold_ping_ng_msec(ini_option_object().get_thread_watch_threshold_ping_ng_msec());
+	time_watcher_observer::set_storage_listener(this);
+
 
 #ifdef ENABLE_MYSQL_REPLICATION
 	if (ini_option_object().is_mysql_replication()) {
@@ -339,6 +344,8 @@ int flared::reload() {
 	this->_cluster->set_noreply_window_limit(ini_option_object().get_noreply_window_limit());
 
 	time_watcher_object->stop();
+	time_watcher_observer::set_threshold_warn_msec(ini_option_object().get_thread_watch_threshold_warn_msec());
+	time_watcher_observer::set_threshold_ping_ng_msec(ini_option_object().get_thread_watch_threshold_ping_ng_msec());
 	time_watcher_object->start(ini_option_object().get_thread_watch_pooling_interval_msec());
 
 	log_notice("process successfully reloaded", 0);

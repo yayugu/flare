@@ -1,6 +1,8 @@
+// order is important. to avoid conflict gree::flare::thread and boost::thread.
+#include "storage_access_info.h"
+
 #include "time_watcher_processor.h"
 #include "logger.h"
-#include "storage_access_info.h"
 #include "time_util.h"
 
 namespace gree {
