@@ -21,15 +21,15 @@ class time_watcher_processor;
 class time_watcher {
 public:
 	typedef map<uint64_t, time_watcher_target_info> target_info_map;
-	AtomicCounter _id_generator;
 
 protected:
-	target_info_map	_map;
-	pthread_mutex_t	_map_mutex;
+	target_info_map                    _map;
+	pthread_mutex_t                    _map_mutex;
+	AtomicCounter                      _id_generator;
 
 	// TODO: unique_ptrの方がいい気がする. boostで使えるか確認
-	shared_ptr<time_watcher_processor>		_processor;
-	shared_ptr<boost::thread>	_thread;
+	shared_ptr<time_watcher_processor> _processor;
+	shared_ptr<boost::thread>          _thread;
 
 public:
 	time_watcher();

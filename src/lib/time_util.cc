@@ -29,8 +29,8 @@ void time_util::timer_sub(const timeval& a, const timeval& b, timeval& result) {
 
 bool time_util::timer_is_bigger(const timeval& a, const timeval& b) {
 	return a.tv_sec == b.tv_sec
-		 ? a.tv_usec > b.tv_usec
-		 : a.tv_sec > b.tv_sec;
+		? a.tv_usec > b.tv_usec
+		: a.tv_sec > b.tv_sec;
 }
 
 void time_util::sleep_timeval(const timeval& t) {

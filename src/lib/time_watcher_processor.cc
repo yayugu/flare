@@ -9,8 +9,8 @@ namespace gree {
 namespace flare {
 
 time_watcher_processor::time_watcher_processor(
-		time_watcher& time_watcher,
-		timeval polling_interval
+	time_watcher& time_watcher,
+	timeval polling_interval
 ):
 		_time_watcher(time_watcher),
 		_polling_interval(polling_interval) {
@@ -54,9 +54,9 @@ void time_watcher_processor::_check_timestamp(const time_watcher_target_info& in
 void time_watcher_processor::_check_timestamps() {
 	time_watcher::target_info_map m = this->_time_watcher.get_map();
 	for (
-			time_watcher::target_info_map::const_iterator it = m.begin();
-			it != m.end();
-			it++
+		time_watcher::target_info_map::const_iterator it = m.begin();
+		it != m.end();
+		it++
 	) {
 		this->_check_timestamp(it->second);
 	}

@@ -13,13 +13,13 @@ class time_watcher;
 class time_watcher_processor {
 protected:
 	time_watcher& _time_watcher;
-	timeval				_polling_interval;
-	bool					_shutdown_requested;
+	timeval       _polling_interval;
+	bool          _shutdown_requested;
 
 public:
 	time_watcher_processor(
-			time_watcher& time_watcher,
-			timeval polling_interval
+		time_watcher& time_watcher,
+		timeval polling_interval
 	);
 	~time_watcher_processor();
 	void operator()(); // Callable

@@ -1,5 +1,5 @@
-#ifndef	TIME_WATHCER_OBSERVER
-#define	TIME_WATHCER_OBSERVER
+#ifndef	TIME_WATHCER_OBSERVER_H
+#define	TIME_WATHCER_OBSERVER_H
 
 #include <stdint.h>
 #include <sys/time.h>
@@ -13,8 +13,8 @@ class storage_access_info;
 
 class time_watcher_observer {
 protected:
-	static timeval _threshold_warn;
-	static timeval _threshold_ping_ng;
+	static timeval           _threshold_warn;
+	static timeval           _threshold_ping_ng;
 	static storage_listener* _storage_listener;
 
 public:
