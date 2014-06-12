@@ -8,4 +8,4 @@
 datarootdir = @datarootdir@
 
 # subdirs
-SUBDIRS = lib flared flarei flarefs
+SUBDIRS = lib twbench

@@ -205,9 +205,8 @@ AC_SUBST(FLARE_LDFLAGS)
 AC_CONFIG_FILES([Makefile \
 	src/Makefile \
 	src/lib/Makefile \
-	src/flared/Makefile \
-	src/flarei/Makefile \
-	src/flarefs/Makefile \
-	test/Makefile \
-	test/lib/Makefile])
+	src/twbench/Makefile])
+#	src/twbench/Makefile \
+#	test/Makefile \
+#	test/lib/Makefile])
 AC_OUTPUT

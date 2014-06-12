@@ -22,17 +22,29 @@ time_watcher_processor::~time_watcher_processor() {
 
 void time_watcher_processor::operator()()
 {
+	timeval t, t2, tmp;
 	for(;;) {
 		if (this->_shutdown_requested) {
-			log_info("thread shutdown request -> breaking loop");
+			log_info("thread shutdown request -> breaking loop", 0);
 			break;
 		}
 		if (this->_polling_interval.tv_sec == 0 &&
 				this->_polling_interval.tv_usec == 0) {
-			log_info("thread watch disabled -> breaking loop");
+			log_info("thread watch disabled -> breaking loop", 0);
 			break;
 		}
+
+		gettimeofday(&t, NULL);
+
 		this->_check_timestamps();
+
+		gettimeofday(&t2, NULL);
+		polling_count++;
+		time_util::timer_sub(t2, t, tmp);
+		polling_time_us += tmp.tv_usec;
+		time_watcher::target_info_map m = this->_time_watcher.get_map();
+		polling_map_count_sum += m.size();
+
 		time_util::sleep_timeval(this->_polling_interval);
 	}
 }
