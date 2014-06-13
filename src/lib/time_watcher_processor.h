@@ -4,9 +4,9 @@
 #include "time_watcher.h"
 #include "time_watcher_target_info.h"
 
-extern int polling_count;
-extern int polling_time_us;
-extern int polling_map_count_sum;
+extern uint64_t polling_count;
+extern uint64_t polling_time_us;
+extern uint64_t polling_map_count_sum;
 
 namespace gree {
 namespace flare {

@@ -5,10 +5,11 @@
 
 using namespace gree::flare;
 
-int polling_count = 0;
-int polling_time_us = 0;
-int polling_map_count_sum = 0;
+uint64_t polling_count = 0;
+uint64_t polling_time_us = 0;
+uint64_t polling_map_count_sum = 0;
 time_watcher* tw = NULL;
+bool shutdown_flag = 0;
 
 void callback(timeval tv, uint64_t dummy) {
 	log_err("running too long time: %u.%6u sec.  %d", tv.tv_sec, tv.tv_usec, dummy);
@@ -28,38 +29,64 @@ void run(int num_target) {
 		for (vector<uint64_t>::iterator it = targets.begin(); it != targets.end(); it++) {
 			tw->unregister_target(*it);
 		}
+		if (shutdown_flag) {
+			return;
+		}
 	}
 }
 
-void create_thread(int num_thread) {
-	boost::function<void()> run2 = boost::bind<void, int>(&run, 10);
+void create_thread(int num_thread, int num_target_per_thread, vector<pthread_t>& threads) {
+	boost::function<void()> run2 = boost::bind<void, int>(&run, num_target_per_thread);
 	for (int i = 0; i < num_thread; i++) {
 		boost::thread th(run2);
+		threads.push_back(th.native_handle());
 		th.detach();
 	}
 }
 
-int main(int argc, char **argv) {
-	logger_singleton::instance().open("twbench", "local1");
-
+void bench(int num_thread, int num_target_per_thread) {
 	tw = new time_watcher();
-	create_thread(100);
+	polling_count = 0;
+	polling_time_us = 0;
+	polling_map_count_sum = 0;
+	shutdown_flag = false;
+	vector<pthread_t> threads;
+	create_thread(num_thread, num_target_per_thread, threads);
 	tw->start(1);
 
-	sleep(5);
+	sleep(10);
 
 	tw->stop();
-	usleep(5 * 1000 * 100); // 0.5 sec
+	shutdown_flag = true;
+	//usleep(5 * 1000 * 100); // 0.5 sec
+	sleep(1);
 	if (polling_count == 0) {
 		printf("polling_count = 0. need to execute with more long time\n");
 		exit(0);
 	}
-	printf("count:%d\ntime:%dms\n%lftimes/sec\navg map count:%d\n",
+	printf("%d\t%d\t%lu\t%lu\t%lf\t%lu\n",
+			num_thread,
+			num_target_per_thread,
 			polling_count,
 			polling_time_us / 1000,
 			(double)polling_count / ((double)polling_time_us / 1000 / 1000),
 			polling_map_count_sum / polling_count);
 
 	delete tw;
+}
+
+int main(int argc, char **argv) {
+	logger_singleton::instance().open("twbench", "local1");
+
+	int num_thread[] = {1, 10, 100};
+	int num_target_per_thread[] = {1, 10, 100, 1000};
+
+	printf("numth\ttgt/th\tcount\ttime[ms]\ttimes/sec\tavg map count\n");
+	for (int i = 0; i < sizeof(num_thread) / sizeof(int); i++) {
+		for (int j = 0; j < sizeof(num_target_per_thread) / sizeof(int); j++) {
+			bench(num_thread[i], num_target_per_thread[j]);
+		}
+	}
+
 	logger_singleton::instance().close();
 }
