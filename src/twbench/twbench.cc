@@ -46,7 +46,7 @@ void create_thread(int num_thread, int num_target_per_thread, vector<pthread_t>&
 }
 
 void bench(int num_thread, int num_target_per_thread, int polling_exec_time) {
-	tw = new time_watcher();
+	tw = new time_watcher(1024);
 	polling_count = 0;
 	polling_time_us = 0;
 	polling_map_count_sum = 0;
@@ -81,11 +81,11 @@ void bench(int num_thread, int num_target_per_thread, int polling_exec_time) {
 int main(int argc, char **argv) {
 	logger_singleton::instance().open("twbench", "local1");
 
-	//int num_thread[] = {1, 10, 100};
-	int num_thread[] = {300};
-	//int num_target_per_thread[] = {1, 10, 100};
-	int num_target_per_thread[] = {300};
-	int polling_exec_time = 120;
+	int num_thread[] = {1, 10, 100};
+	//int num_thread[] = {1000};
+	int num_target_per_thread[] = {1, 10, 100};
+	//int num_target_per_thread[] = {100};
+	int polling_exec_time = 30;
 
 	printf("numth\ttgt/th\tcount\ttime[ms]\tavg polling time[ms]\tpolling exexution time percentage\tavg map count\n");
 	for (int i = 0; i < sizeof(num_thread) / sizeof(int); i++) {
@@ -93,6 +93,8 @@ int main(int argc, char **argv) {
 			bench(num_thread[i], num_target_per_thread[j], polling_exec_time);
 		}
 	}
+	bench(100, 300, polling_exec_time);
+	bench(300, 100, polling_exec_time);
 
 	logger_singleton::instance().close();
 }

@@ -44,8 +44,16 @@ void time_watcher_processor::operator()()
 		polling_count++;
 		time_util::timer_sub(t2, t, tmp);
 		polling_time_us += tmp.tv_usec;
-		time_watcher::target_info_map m = this->_time_watcher.get_map();
-		polling_map_count_sum += m.size();
+		time_watcher::target_info_map_slots v = this->_time_watcher.get_map_slots();
+		for (
+			time_watcher::target_info_map_slots::const_iterator slot_it = v.begin();
+			slot_it != v.end();
+			slot_it++
+		) {
+			polling_map_count_sum += slot_it->size();
+		}
+		//time_watcher::target_info_map m = this->_time_watcher.get_map();
+		//polling_map_count_sum += m.size();
 
 		//time_util::sleep_timeval(this->_polling_interval);
 	}
@@ -67,13 +75,19 @@ void time_watcher_processor::_check_timestamp(const time_watcher_target_info& in
 }
 
 void time_watcher_processor::_check_timestamps() {
-	time_watcher::target_info_map m = this->_time_watcher.get_map();
+	time_watcher::target_info_map_slots v = this->_time_watcher.get_map_slots();
 	for (
-		time_watcher::target_info_map::const_iterator it = m.begin();
-		it != m.end();
-		it++
+		time_watcher::target_info_map_slots::const_iterator slot_it = v.begin();
+		slot_it != v.end();
+		slot_it++
 	) {
-		this->_check_timestamp(it->second);
+		for (
+			time_watcher::target_info_map::const_iterator map_it = slot_it->begin();
+			map_it != slot_it->end();
+			map_it++
+		) {
+			this->_check_timestamp(map_it->second);
+		}
 	}
 }
 
