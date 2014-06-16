@@ -15,12 +15,14 @@ class time_watcher;
 
 class time_watcher_processor {
 protected:
-	time_watcher& _time_watcher;
-	timeval       _polling_interval;
-	bool          _shutdown_requested;
+	shared_ptr<time_watcher_processor> _shared_this;
+	time_watcher&                      _time_watcher;
+	timeval                            _polling_interval;
+	bool                               _shutdown_requested;
 
 public:
 	time_watcher_processor(
+		shared_ptr<time_watcher_processor> shared_this, // for memory management
 		time_watcher& time_watcher,
 		timeval polling_interval
 	);
