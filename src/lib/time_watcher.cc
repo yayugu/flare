@@ -43,6 +43,7 @@ void time_watcher::unregister_target(uint64_t id) {
 
 void time_watcher::start(uint32_t polling_interval_msec) {
 	this->_processor.reset(new time_watcher_processor(
+		this->_processor,
 		*this,
 		time_util::msec_to_timeval(polling_interval_msec)
 	));

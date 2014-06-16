@@ -9,9 +9,11 @@ namespace gree {
 namespace flare {
 
 time_watcher_processor::time_watcher_processor(
+	shared_ptr<time_watcher_processor> shared_this,
 	time_watcher& time_watcher,
 	timeval polling_interval
 ):
+		_shared_this(shared_this),
 		_time_watcher(time_watcher),
 		_polling_interval(polling_interval) {
 	this->_shutdown_requested = false;
@@ -35,6 +37,7 @@ void time_watcher_processor::operator()()
 		this->_check_timestamps();
 		time_util::sleep_timeval(this->_polling_interval);
 	}
+	_shared_this.reset();
 }
 
 void time_watcher_processor::request_shutdown() {
