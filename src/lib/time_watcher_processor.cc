@@ -47,7 +47,7 @@ void time_watcher_processor::operator()()
 		time_watcher::target_info_map m = this->_time_watcher.get_map();
 		polling_map_count_sum += m.size();
 
-		time_util::sleep_timeval(this->_polling_interval);
+		//time_util::sleep_timeval(this->_polling_interval);
 	}
 	_shared_this.reset();
 }

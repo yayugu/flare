@@ -21,11 +21,12 @@ void run(int num_target) {
 	tv.tv_usec = 0;
 	volatile uint64_t dummy = 1234;
 	for (;;) {
+		usleep(2 * 1000);
 		vector<uint64_t> targets;
 		for (int i = 0; i < num_target; i++) {
 			targets.push_back(tw->register_target(tv, boost::bind(&callback, _1, dummy)));;
 		}
-		usleep(1 * 1000);
+		usleep(8 * 1000);
 		for (vector<uint64_t>::iterator it = targets.begin(); it != targets.end(); it++) {
 			tw->unregister_target(*it);
 		}
@@ -44,7 +45,7 @@ void create_thread(int num_thread, int num_target_per_thread, vector<pthread_t>&
 	}
 }
 
-void bench(int num_thread, int num_target_per_thread) {
+void bench(int num_thread, int num_target_per_thread, int polling_exec_time) {
 	tw = new time_watcher();
 	polling_count = 0;
 	polling_time_us = 0;
@@ -54,7 +55,7 @@ void bench(int num_thread, int num_target_per_thread) {
 	create_thread(num_thread, num_target_per_thread, threads);
 	tw->start(1);
 
-	sleep(30);
+	sleep(polling_exec_time);
 
 	tw->stop();
 	shutdown_flag = true;
@@ -65,12 +66,13 @@ void bench(int num_thread, int num_target_per_thread) {
 		printf("polling_count = 0. need to execute with more long time\n");
 		return;
 	}
-	printf("%d\t%d\t%lu\t%lu\t%lf\t%lu\n",
+	printf("%d\t%d\t%lu\t%lu\t%lf\t%lf\t%lu\n",
 			num_thread,
 			num_target_per_thread,
 			polling_count,
 			polling_time_us / 1000,
 			(double)polling_time_us / 1000 / (double)polling_count,
+			(double)polling_time_us / 1000.0 / 1000.0 / (double)polling_exec_time * 100.0,
 			polling_map_count_sum / polling_count);
 
 	delete tw;
@@ -79,14 +81,16 @@ void bench(int num_thread, int num_target_per_thread) {
 int main(int argc, char **argv) {
 	logger_singleton::instance().open("twbench", "local1");
 
-	int num_thread[] = {1, 10, 100};
-	//int num_thread[] = {1000};
-	int num_target_per_thread[] = {1, 10, 100};
+	//int num_thread[] = {1, 10, 100};
+	int num_thread[] = {300};
+	//int num_target_per_thread[] = {1, 10, 100};
+	int num_target_per_thread[] = {300};
+	int polling_exec_time = 120;
 
-	printf("numth\ttgt/th\tcount\ttime[ms]\tavg polling time[ms]\tavg map count\n");
+	printf("numth\ttgt/th\tcount\ttime[ms]\tavg polling time[ms]\tpolling exexution time percentage\tavg map count\n");
 	for (int i = 0; i < sizeof(num_thread) / sizeof(int); i++) {
 		for (int j = 0; j < sizeof(num_target_per_thread) / sizeof(int); j++) {
-			bench(num_thread[i], num_target_per_thread[j]);
+			bench(num_thread[i], num_target_per_thread[j], polling_exec_time);
 		}
 	}
 
