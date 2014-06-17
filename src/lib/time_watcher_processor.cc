@@ -44,8 +44,8 @@ void time_watcher_processor::operator()()
 		polling_count++;
 		time_util::timer_sub(t2, t, tmp);
 		polling_time_us += tmp.tv_usec;
-		time_watcher::target_info_map m = this->_time_watcher.get_map();
-		polling_map_count_sum += m.size();
+		//time_watcher::target_info_map m = this->_time_watcher.get_map();
+		//polling_map_count_sum += m.size();
 
 		//time_util::sleep_timeval(this->_polling_interval);
 	}
@@ -57,6 +57,9 @@ void time_watcher_processor::request_shutdown() {
 }
 
 void time_watcher_processor::_check_timestamp(const time_watcher_target_info& info) {
+	if (!info.watching) {
+		return;
+	}
 	timeval now;
 	timeval sub;
 	gettimeofday(&now, NULL);

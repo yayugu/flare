@@ -26,6 +26,7 @@ time_watcher::target_info_map time_watcher::get_map() {
 uint64_t time_watcher::register_target(timeval threshold, boost::function<void(timeval)> callback) {
 	time_watcher_target_info info;
 	gettimeofday(&info.timestamp, NULL);
+	info.watching = false;
 	info.threshold = threshold;
 	info.callback = callback;
 	pthread_mutex_lock(&this->_map_mutex);
@@ -33,6 +34,15 @@ uint64_t time_watcher::register_target(timeval threshold, boost::function<void(t
 	this->_map[id] = info;
 	pthread_mutex_unlock(&this->_map_mutex);
 	return id;
+}
+
+void time_watcher::start_watch(uint64_t id) {
+	gettimeofday(&this->_map[id].timestamp, NULL);
+	this->_map[id].watching = true;
+}
+
+void time_watcher::end_watch(uint64_t id) {
+	this->_map[id].watching = false;
 }
 
 void time_watcher::unregister_target(uint64_t id) {

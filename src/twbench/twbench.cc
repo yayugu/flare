@@ -20,20 +20,35 @@ void run(int num_target) {
 	tv.tv_sec = 1;
 	tv.tv_usec = 0;
 	volatile uint64_t dummy = 1234;
+	vector<uint64_t> targets;
+	/*
+	for (int i = 0; i < num_target; i++) {
+		targets.push_back(tw->register_target(tv, boost::bind(&callback, _1, dummy)));;
+	}
+	*/
 	for (;;) {
 		usleep(2 * 1000);
-		vector<uint64_t> targets;
-		for (int i = 0; i < num_target; i++) {
-			targets.push_back(tw->register_target(tv, boost::bind(&callback, _1, dummy)));;
-		}
-		usleep(8 * 1000);
+	/*
 		for (vector<uint64_t>::iterator it = targets.begin(); it != targets.end(); it++) {
-			tw->unregister_target(*it);
+			tw->start_watch(*it);
 		}
+	*/
+		usleep(8 * 1000);
+		sleep(10);
+	/*
+		for (vector<uint64_t>::iterator it = targets.begin(); it != targets.end(); it++) {
+			tw->end_watch(*it);
+		}
+	*/
 		if (shutdown_flag) {
-			return;
+			break;
 		}
 	}
+	/*
+	for (vector<uint64_t>::iterator it = targets.begin(); it != targets.end(); it++) {
+		tw->unregister_target(*it);
+	}
+	*/
 }
 
 void create_thread(int num_thread, int num_target_per_thread, vector<pthread_t>& threads) {
@@ -81,18 +96,24 @@ void bench(int num_thread, int num_target_per_thread, int polling_exec_time) {
 int main(int argc, char **argv) {
 	logger_singleton::instance().open("twbench", "local1");
 
-	//int num_thread[] = {1, 10, 100};
-	int num_thread[] = {300};
-	//int num_target_per_thread[] = {1, 10, 100};
-	int num_target_per_thread[] = {300};
-	int polling_exec_time = 120;
+	int num_thread[] = {1, 10, 100};
+	//int num_thread[] = {1000};
+	int num_target_per_thread[] = {1, 10, 100};
+	//int num_target_per_thread[] = {10};
+	int polling_exec_time = 30;
 
 	printf("numth\ttgt/th\tcount\ttime[ms]\tavg polling time[ms]\tpolling exexution time percentage\tavg map count\n");
+	/*
 	for (int i = 0; i < sizeof(num_thread) / sizeof(int); i++) {
 		for (int j = 0; j < sizeof(num_target_per_thread) / sizeof(int); j++) {
 			bench(num_thread[i], num_target_per_thread[j], polling_exec_time);
 		}
 	}
+	*/
+	bench(100, 300, polling_exec_time);
+	bench(300, 100, polling_exec_time);
+	bench(1000, 10, polling_exec_time);
+	bench(10000, 2, polling_exec_time);
 
 	logger_singleton::instance().close();
 }

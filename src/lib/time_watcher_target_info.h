@@ -11,6 +11,7 @@ namespace flare {
 
 class time_watcher_target_info {
 public:
+	bool                    watching;
 	timeval                 timestamp;
 	timeval                 threshold;
 	function<void(timeval)> callback;
