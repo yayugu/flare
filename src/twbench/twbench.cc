@@ -60,20 +60,21 @@ void bench(int num_thread, int num_target_per_thread, int polling_exec_time) {
 	tw->stop();
 	shutdown_flag = true;
 	//usleep(5 * 1000 * 100); // 0.5 sec
-	sleep(2);
+	sleep(5);
 	if (polling_count == 0) {
 		printf("%d\t%d\n", num_thread, num_target_per_thread);
 		printf("polling_count = 0. need to execute with more long time\n");
 		return;
 	}
-	printf("%d\t%d\t%lu\t%lu\t%lf\t%lf\t%lu\n",
+	printf("%d\t%d\t%lu\t%lu\t%lf\t%lf\t%lu\t%lu\n",
 			num_thread,
 			num_target_per_thread,
 			polling_count,
 			polling_time_us / 1000,
 			(double)polling_time_us / 1000 / (double)polling_count,
 			(double)polling_time_us / 1000.0 / 1000.0 / (double)polling_exec_time * 100.0,
-			polling_map_count_sum / polling_count);
+			polling_map_count_sum / polling_count,
+			polling_map_count_sum);
 
 	delete tw;
 }
@@ -81,10 +82,10 @@ void bench(int num_thread, int num_target_per_thread, int polling_exec_time) {
 int main(int argc, char **argv) {
 	logger_singleton::instance().open("twbench", "local1");
 
-	int num_thread[] = {1, 10, 100};
-	//int num_thread[] = {1000};
-	int num_target_per_thread[] = {1, 10, 100};
-	//int num_target_per_thread[] = {100};
+	//int num_thread[] = {1, 10, 100};
+	int num_thread[] = {100};
+	//int num_target_per_thread[] = {1, 10, 100};
+	int num_target_per_thread[] = {100};
 	int polling_exec_time = 30;
 
 	printf("numth\ttgt/th\tcount\ttime[ms]\tavg polling time[ms]\tpolling exexution time percentage\tavg map count\n");
@@ -93,8 +94,11 @@ int main(int argc, char **argv) {
 			bench(num_thread[i], num_target_per_thread[j], polling_exec_time);
 		}
 	}
+	/*
 	bench(100, 300, polling_exec_time);
 	bench(300, 100, polling_exec_time);
+	bench(8000, 5, polling_exec_time);
+	*/
 
 	logger_singleton::instance().close();
 }

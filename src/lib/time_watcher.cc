@@ -1,7 +1,6 @@
 #include "storage_access_info.h"
 #include "time_util.h"
 #include "time_watcher.h"
-#include <libhashkit/hashkit.h>
 
 namespace gree {
 namespace flare {
@@ -86,7 +85,7 @@ uint64_t time_watcher::_generate_id() {
 }
 
 uint32_t time_watcher::_slot_index_from_id(uint64_t id) {
-	return libhashkit_murmur((const char *)&id, sizeof(id)) % this->_map_mutex_slots.size();
+	return id % this->_map_mutex_slots.size();
 }
 
 }	// namespace flare
