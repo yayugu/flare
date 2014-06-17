@@ -7,6 +7,7 @@
 extern uint64_t polling_count;
 extern uint64_t polling_time_us;
 extern uint64_t polling_map_count_sum;
+extern bool shutdowned;
 
 namespace gree {
 namespace flare {

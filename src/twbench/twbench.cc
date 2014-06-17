@@ -10,6 +10,7 @@ uint64_t polling_time_us = 0;
 uint64_t polling_map_count_sum = 0;
 time_watcher* tw = NULL;
 bool shutdown_flag = 0;
+bool shutdowned = 0;
 
 void callback(timeval tv, uint64_t dummy) {
 	log_err("running too long time: %u.%6u sec.  %d", tv.tv_sec, tv.tv_usec, dummy);
@@ -61,6 +62,9 @@ void bench(int num_thread, int num_target_per_thread, int polling_exec_time) {
 	shutdown_flag = true;
 	//usleep(5 * 1000 * 100); // 0.5 sec
 	sleep(5);
+	while (!shutdowned) {
+		sleep(1);
+	}
 	if (polling_count == 0) {
 		printf("%d\t%d\n", num_thread, num_target_per_thread);
 		printf("polling_count = 0. need to execute with more long time\n");
