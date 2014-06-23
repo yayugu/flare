@@ -10,6 +10,7 @@ uint64_t polling_time_us = 0;
 uint64_t polling_map_count_sum = 0;
 time_watcher* tw = NULL;
 bool shutdown_flag = 0;
+bool shutdowned = false;
 
 void callback(timeval tv, uint64_t dummy) {
 	log_err("running too long time: %u.%6u sec.  %d", tv.tv_sec, tv.tv_usec, dummy);
@@ -21,34 +22,26 @@ void run(int num_target) {
 	tv.tv_usec = 0;
 	volatile uint64_t dummy = 1234;
 	vector<uint64_t> targets;
-	/*
 	for (int i = 0; i < num_target; i++) {
 		targets.push_back(tw->register_target(tv, boost::bind(&callback, _1, dummy)));;
 	}
-	*/
 	for (;;) {
 		usleep(2 * 1000);
-	/*
 		for (vector<uint64_t>::iterator it = targets.begin(); it != targets.end(); it++) {
 			tw->start_watch(*it);
 		}
-	*/
 		usleep(8 * 1000);
 		sleep(10);
-	/*
 		for (vector<uint64_t>::iterator it = targets.begin(); it != targets.end(); it++) {
 			tw->end_watch(*it);
 		}
-	*/
 		if (shutdown_flag) {
 			break;
 		}
 	}
-	/*
 	for (vector<uint64_t>::iterator it = targets.begin(); it != targets.end(); it++) {
 		tw->unregister_target(*it);
 	}
-	*/
 }
 
 void create_thread(int num_thread, int num_target_per_thread, vector<pthread_t>& threads) {
@@ -76,6 +69,9 @@ void bench(int num_thread, int num_target_per_thread, int polling_exec_time) {
 	shutdown_flag = true;
 	//usleep(5 * 1000 * 100); // 0.5 sec
 	sleep(2);
+	while (!shutdowned) {
+		sleep(1);
+	}
 	if (polling_count == 0) {
 		printf("%d\t%d\n", num_thread, num_target_per_thread);
 		printf("polling_count = 0. need to execute with more long time\n");

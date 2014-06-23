@@ -26,6 +26,7 @@ void time_watcher_processor::operator()()
 {
 	timeval t, t2, tmp;
 	for(;;) {
+		shutdowned = false;
 		if (this->_shutdown_requested) {
 			log_info("thread shutdown request -> breaking loop", 0);
 			break;
@@ -49,6 +50,7 @@ void time_watcher_processor::operator()()
 
 		//time_util::sleep_timeval(this->_polling_interval);
 	}
+	shutdowned = true;
 	_shared_this.reset();
 }
 
