@@ -26,8 +26,6 @@ protected:
 	target_info_map                    _map;
 	pthread_mutex_t                    _map_mutex;
 	AtomicCounter                      _id_generator;
-
-	// TODO: unique_ptrの方がいい気がする. boostで使えるか確認
 	shared_ptr<time_watcher_processor> _processor;
 	shared_ptr<boost::thread>          _thread;
 
