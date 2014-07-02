@@ -16,7 +16,8 @@ void callback(timeval tv, uint64_t dummy) {
 	log_err("running too long time: %u.%6u sec.  %d", tv.tv_sec, tv.tv_usec, dummy);
 }
 
-void run(int num_target) {
+void* run(void* param) {
+	static int num_target = 2;
 	timeval tv;
 	tv.tv_sec = 1;
 	tv.tv_usec = 0;
@@ -38,11 +39,14 @@ void run(int num_target) {
 }
 
 void create_thread(int num_thread, int num_target_per_thread, vector<pthread_t>& threads) {
-	boost::function<void()> run2 = boost::bind<void, int>(&run, num_target_per_thread);
+	//boost::function<void()> run2 = boost::bind<void, int>(&run, num_target_per_thread);
 	for (int i = 0; i < num_thread; i++) {
-		boost::thread th(run2);
-		threads.push_back(th.native_handle());
-		th.detach();
+		//boost::thread th(run2);
+		//threads.push_back(th.native_handle());
+		//th.detach();
+		pthread_t tid;
+		pthread_create(&tid, NULL, run, NULL);
+		pthread_detatch(tid);
 	}
 }
 
@@ -93,16 +97,19 @@ int main(int argc, char **argv) {
 	int polling_exec_time = 30;
 
 	printf("numth\ttgt/th\tcount\ttime[ms]\tavg polling time[ms]\tpolling exexution time percentage\tavg map count\n");
+	/*
 	for (int i = 0; i < sizeof(num_thread) / sizeof(int); i++) {
 		for (int j = 0; j < sizeof(num_target_per_thread) / sizeof(int); j++) {
 			bench(num_thread[i], num_target_per_thread[j], polling_exec_time);
 		}
 	}
-	/*
+	*/
 	bench(100, 300, polling_exec_time);
 	bench(300, 100, polling_exec_time);
-	bench(8000, 5, polling_exec_time);
-	*/
+	bench(2000, 2, polling_exec_time);
+	bench(5000, 2, polling_exec_time);
+	bench(8000, 2, polling_exec_time);
+	bench(10000, 2, polling_exec_time);
 
 	logger_singleton::instance().close();
 }
