@@ -33,9 +33,10 @@ void* run(void* param) {
 			tw->unregister_target(*it);
 		}
 		if (shutdown_flag) {
-			return;
+			return 0;
 		}
 	}
+	return 0;
 }
 
 void create_thread(int num_thread, int num_target_per_thread, vector<pthread_t>& threads) {
@@ -46,7 +47,13 @@ void create_thread(int num_thread, int num_target_per_thread, vector<pthread_t>&
 		//th.detach();
 		pthread_t tid;
 		pthread_create(&tid, NULL, run, NULL);
-		pthread_detatch(tid);
+		threads.push_back<tid>;
+	}
+}
+
+void join_thread(vector<pthread_t>& threads) {
+	for (vector<pthread_t>::iterator it = threads.begin(); it != threads.end(); it++) {
+		pthread_join(*it);
 	}
 }
 
@@ -65,7 +72,8 @@ void bench(int num_thread, int num_target_per_thread, int polling_exec_time) {
 	tw->stop();
 	shutdown_flag = true;
 	//usleep(5 * 1000 * 100); // 0.5 sec
-	sleep(5);
+	//sleep(25);
+	join_thread(threads);
 	while (!shutdowned) {
 		sleep(1);
 	}
