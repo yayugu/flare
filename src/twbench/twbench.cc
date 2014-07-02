@@ -11,6 +11,9 @@ uint64_t polling_map_count_sum = 0;
 time_watcher* tw = NULL;
 bool shutdown_flag = 0;
 bool shutdowned = 0;
+pthread_cond_t start_cond = PTHREAD_COND_INITIALIZER;
+pthread_mutex_t start_count_mutex = PTHREAD_MUTEX_INITIALIZER;
+int start_count = 0;
 
 void callback(timeval tv, uint64_t dummy) {
 	log_err("running too long time: %u.%6u sec.  %d", tv.tv_sec, tv.tv_usec, dummy);
@@ -22,6 +25,10 @@ void* run(void* param) {
 	tv.tv_sec = 1;
 	tv.tv_usec = 0;
 	volatile uint64_t dummy = 1234;
+	pthread_mutex_lock(&start_count_mutex);
+	start_count++;
+	pthread_mutex_unlock(&start_count_mutex);
+	//pthread_cond_wait(&start_cond, NULL);
 	for (;;) {
 		usleep(2 * 1000);
 		vector<uint64_t> targets;
@@ -47,13 +54,13 @@ void create_thread(int num_thread, int num_target_per_thread, vector<pthread_t>&
 		//th.detach();
 		pthread_t tid;
 		pthread_create(&tid, NULL, run, NULL);
-		threads.push_back<tid>;
+		threads.push_back(tid);
 	}
 }
 
 void join_thread(vector<pthread_t>& threads) {
 	for (vector<pthread_t>::iterator it = threads.begin(); it != threads.end(); it++) {
-		pthread_join(*it);
+		pthread_join(*it, NULL);
 	}
 }
 
@@ -63,35 +70,40 @@ void bench(int num_thread, int num_target_per_thread, int polling_exec_time) {
 	polling_time_us = 0;
 	polling_map_count_sum = 0;
 	shutdown_flag = false;
+	pthread_cond_init(&start_cond, NULL);
+	pthread_mutex_init(&start_count_mutex, NULL);
+	start_count = 0;
+	timeval start, end, sub;
 	vector<pthread_t> threads;
+	printf("thread initialize\n");
 	create_thread(num_thread, num_target_per_thread, threads);
-	tw->start(1);
-
-	sleep(polling_exec_time);
-
-	tw->stop();
-	shutdown_flag = true;
-	//usleep(5 * 1000 * 100); // 0.5 sec
-	//sleep(25);
-	join_thread(threads);
-	while (!shutdowned) {
+	while (start_count == num_target_per_thread) {
 		sleep(1);
 	}
+	//pthread_cond_broadcast(&start_cond);
+	printf("start\n");
+	gettimeofday(&start, NULL);
+	tw->start(1);
+
+	//tw->stop();
+	shutdown_flag = true;
+	while (!shutdowned) {
+		usleep(100 * 1000); // 100ms
+	}
+	gettimeofday(&end, NULL);
+	time_util::timer_sub(end, start, sub);
+	join_thread(threads);
 	if (polling_count == 0) {
 		printf("%d\t%d\n", num_thread, num_target_per_thread);
 		printf("polling_count = 0. need to execute with more long time\n");
 		return;
 	}
-	printf("%d\t%d\t%lu\t%lu\t%lf\t%lf\t%lu\t%lu\n",
+	printf("%d\t%d\t%ld.%06ld\n",
 			num_thread,
 			num_target_per_thread,
-			polling_count,
-			polling_time_us / 1000,
-			(double)polling_time_us / 1000 / (double)polling_count,
-			(double)polling_time_us / 1000.0 / 1000.0 / (double)polling_exec_time * 100.0,
-			polling_map_count_sum / polling_count,
-			polling_map_count_sum);
+			sub.tv_sec, sub.tv_usec);
 
+	sleep(1);
 	delete tw;
 }
 
@@ -104,7 +116,7 @@ int main(int argc, char **argv) {
 	int num_target_per_thread[] = {100};
 	int polling_exec_time = 30;
 
-	printf("numth\ttgt/th\tcount\ttime[ms]\tavg polling time[ms]\tpolling exexution time percentage\tavg map count\n");
+	printf("numth\ttgt/th\ttime[s]\n");
 	/*
 	for (int i = 0; i < sizeof(num_thread) / sizeof(int); i++) {
 		for (int j = 0; j < sizeof(num_target_per_thread) / sizeof(int); j++) {

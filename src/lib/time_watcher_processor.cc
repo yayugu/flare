@@ -25,7 +25,7 @@ time_watcher_processor::~time_watcher_processor() {
 void time_watcher_processor::operator()()
 {
 	timeval t, t2, tmp;
-	for(;;) {
+	for(int i = 0; i < 100; i++) {
 		shutdowned = false;
 		if (this->_shutdown_requested) {
 			log_info("thread shutdown request -> breaking loop", 0);
