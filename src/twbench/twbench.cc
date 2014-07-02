@@ -11,8 +11,9 @@ uint64_t polling_map_count_sum = 0;
 time_watcher* tw = NULL;
 bool shutdown_flag = 0;
 bool shutdowned = 0;
-pthread_cond_t start_cond = PTHREAD_COND_INITIALIZER;
+pthread_cond_t ready_cond = PTHREAD_COND_INITIALIZER;
 pthread_mutex_t start_count_mutex = PTHREAD_MUTEX_INITIALIZER;
+bool ready_flag = 0;
 int start_count = 0;
 
 void callback(timeval tv, uint64_t dummy) {
@@ -25,10 +26,16 @@ void* run(void* param) {
 	tv.tv_sec = 1;
 	tv.tv_usec = 0;
 	volatile uint64_t dummy = 1234;
+
+
 	pthread_mutex_lock(&start_count_mutex);
 	start_count++;
+	pthread_cond_signal(&ready_cond);
 	pthread_mutex_unlock(&start_count_mutex);
-	//pthread_cond_wait(&start_cond, NULL);
+
+	while (ready_flag) {
+		usleep(1 * 1000);
+	}
 	for (;;) {
 		usleep(2 * 1000);
 		vector<uint64_t> targets;
@@ -70,17 +77,22 @@ void bench(int num_thread, int num_target_per_thread, int polling_exec_time) {
 	polling_time_us = 0;
 	polling_map_count_sum = 0;
 	shutdown_flag = false;
-	pthread_cond_init(&start_cond, NULL);
+	pthread_cond_init(&ready_cond, NULL);
 	pthread_mutex_init(&start_count_mutex, NULL);
+	ready_flag = 0;
 	start_count = 0;
 	timeval start, end, sub;
 	vector<pthread_t> threads;
 	printf("thread initialize\n");
+
+	pthread_mutex_lock(&start_count_mutex);
 	create_thread(num_thread, num_target_per_thread, threads);
-	while (start_count == num_target_per_thread) {
-		sleep(1);
+	while (start_count < num_thread) {
+		pthread_cond_wait(&ready_cond, &start_count_mutex);
 	}
-	//pthread_cond_broadcast(&start_cond);
+	pthread_mutex_unlock(&start_count_mutex);
+	ready_flag = 1;
+	sleep(1);
 	printf("start\n");
 	gettimeofday(&start, NULL);
 	tw->start(1);
@@ -93,11 +105,6 @@ void bench(int num_thread, int num_target_per_thread, int polling_exec_time) {
 	gettimeofday(&end, NULL);
 	time_util::timer_sub(end, start, sub);
 	join_thread(threads);
-	if (polling_count == 0) {
-		printf("%d\t%d\n", num_thread, num_target_per_thread);
-		printf("polling_count = 0. need to execute with more long time\n");
-		return;
-	}
 	printf("%d\t%d\t%ld.%06ld\n",
 			num_thread,
 			num_target_per_thread,
@@ -124,12 +131,14 @@ int main(int argc, char **argv) {
 		}
 	}
 	*/
-	bench(100, 300, polling_exec_time);
-	bench(300, 100, polling_exec_time);
+	bench(100, 2, polling_exec_time);
+	bench(300, 2, polling_exec_time);
 	bench(2000, 2, polling_exec_time);
 	bench(5000, 2, polling_exec_time);
 	bench(8000, 2, polling_exec_time);
 	bench(10000, 2, polling_exec_time);
+	bench(15000, 2, polling_exec_time);
+	bench(20000, 2, polling_exec_time);
 
 	logger_singleton::instance().close();
 }
