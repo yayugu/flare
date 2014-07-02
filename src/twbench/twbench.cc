@@ -131,8 +131,7 @@ int main(int argc, char **argv) {
 		}
 	}
 	*/
-	bench(100, 2, polling_exec_time);
-	bench(300, 2, polling_exec_time);
+	bench(1000, 2, polling_exec_time);
 	bench(2000, 2, polling_exec_time);
 	bench(5000, 2, polling_exec_time);
 	bench(8000, 2, polling_exec_time);
