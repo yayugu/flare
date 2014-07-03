@@ -1,3 +1,8 @@
+/**
+ *	time_watcher_processor.h
+ *
+ *	@author	Yuya Yaguchi <yuya.yaguchi@gree.net>
+ */
 #ifndef	TIME_WATHCER_PROCESSOR_H
 #define	TIME_WATHCER_PROCESSOR_H
 

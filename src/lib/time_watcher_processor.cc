@@ -1,3 +1,9 @@
+/**
+ *	time_watcher_processor.cc
+ *
+ *	@author	Yuya Yaguchi <yuya.yaguchi@gree.net>
+ */
+
 // order is important. to avoid conflict gree::flare::thread and boost::thread.
 #include "storage_access_info.h"
 

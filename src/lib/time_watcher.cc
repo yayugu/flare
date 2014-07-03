@@ -1,3 +1,8 @@
+/**
+ *	time_watcher.h
+ *
+ *	@author	Yuya Yaguchi <yuya.yaguchi@gree.net>
+ */
 #include "storage_access_info.h"
 #include "time_util.h"
 #include "time_watcher.h"

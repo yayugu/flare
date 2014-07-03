@@ -1,3 +1,8 @@
+/**
+ *	time_watcher_observer.cc
+ *
+ *	@author	Yuya Yaguchi <yuya.yaguchi@gree.net>
+ */
 #include "app.h"
 #include "logger.h"
 #include "time_util.h"

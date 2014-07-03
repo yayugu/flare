@@ -1,3 +1,8 @@
+/**
+ *	time_watcher_observer.h
+ *
+ *	@author	Yuya Yaguchi <yuya.yaguchi@gree.net>
+ */
 #ifndef	TIME_WATHCER_OBSERVER_H
 #define	TIME_WATHCER_OBSERVER_H
 
