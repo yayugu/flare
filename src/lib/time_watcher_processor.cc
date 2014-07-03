@@ -32,12 +32,12 @@ void time_watcher_processor::operator()()
 {
 	for(;;) {
 		if (this->_shutdown_requested) {
-			log_info("thread shutdown request -> breaking loop");
+			log_info("thread shutdown request -> breaking loop", 0);
 			break;
 		}
 		if (this->_polling_interval.tv_sec == 0 &&
 				this->_polling_interval.tv_usec == 0) {
-			log_info("thread watch disabled -> breaking loop");
+			log_info("thread watch disabled -> breaking loop", 0);
 			break;
 		}
 		this->_check_timestamps();

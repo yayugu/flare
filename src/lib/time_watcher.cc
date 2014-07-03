@@ -11,11 +11,12 @@ namespace gree {
 namespace flare {
 
 time_watcher::time_watcher():
-	_id_generator(0) {
-	this->_map.clear();
+	_map(),
+	_id_generator(0),
+	_is_polling(false),
+	_processor(),
+	_thread() {
 	pthread_mutex_init(&this->_map_mutex, NULL);
-	this->_thread.reset();
-	this->_processor.reset();
 }
 
 time_watcher::~time_watcher() {
@@ -47,19 +48,28 @@ void time_watcher::unregister_target(uint64_t id) {
 }
 
 void time_watcher::start(uint32_t polling_interval_msec) {
+	if (_is_polling) {
+		log_err("a polling thread is still running.", 0);
+		return;
+	}
 	this->_processor.reset(new time_watcher_processor(
 		this->_processor,
 		*this,
 		time_util::msec_to_timeval(polling_interval_msec)
 	));
 	this->_thread.reset(new boost::thread(boost::ref(*this->_processor)));
+	this->_is_polling = true;
 }
 
 void time_watcher::stop() {
+	if (!_is_polling) {
+		return;
+	}
 	this->_processor->request_shutdown();
 	this->_thread->detach();
 	this->_thread.reset();
 	this->_processor.reset();
+	this->_is_polling = false;
 }
 
 uint64_t time_watcher::_generate_id() {

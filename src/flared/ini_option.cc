@@ -59,9 +59,10 @@ ini_option::ini_option():
 		_thread_pool_size(default_thread_pool_size),
 		_proxy_prior_netmask(default_proxy_prior_netmask),
 		_max_total_thread_queue(default_max_total_thread_queue),
-		_time_watcher_polling_interval_msec(default_time_watcher_polling_interval_msec) ,
-		_storage_access_watch_threshold_warn_msec(default_storage_access_watch_threshold_warn_msec),
-		_storage_access_watch_threshold_ping_ng_msec(default_storage_access_watch_threshold_ping_ng_msec) {
+		_time_watcher_enabled(false),
+		_time_watcher_polling_interval_msec(default_time_watcher_polling_interval_msec),
+		_storage_access_watch_threshold_warn_msec(0),
+		_storage_access_watch_threshold_ping_ng_msec(0) {
 	pthread_mutex_init(&this->_mutex_index_servers, NULL);
 }
 
@@ -320,6 +321,10 @@ int ini_option::load() {
 			this->_max_total_thread_queue = opt_var_map["max-total-thread-queue"].as<uint32_t>();
 		}
 
+		if (opt_var_map.count("time-watcher-enabled")) {
+			this->_time_watcher_enabled = opt_var_map["time-watcher-enabled"].as<bool>();
+		}
+
 		if (opt_var_map.count("time-watcher-polling-interval-msec")) {
 			this->_time_watcher_polling_interval_msec = opt_var_map["time-watcher-polling-interval-msec"].as<uint32_t>();
 		}
@@ -460,6 +465,13 @@ int ini_option::reload() {
 			this->_noreply_window_limit = opt_var_map["noreply-window-limit"].as<int>();
 		}
 
+		if (opt_var_map.count("time-watcher-enabled")) {
+			log_notice("  time_watcher_enabled: %s -> %s",
+					this->_time_watcher_enabled ? "true" : "false",
+					opt_var_map["time_watcher-enabled"].as<bool>() ? "true" : "false");
+			this->_time_watcher_enabled = opt_var_map["time-watcher-enabled"].as<bool>();
+		}
+
 		if (opt_var_map.count("time-watcher-polling-interval-msec")) {
 			log_notice("  time_watcher_polling_interval_msec: %u -> %u", this->_time_watcher_polling_interval_msec, opt_var_map["time_watcher-polling-interval-msec"].as<uint32_t>());
 			this->_time_watcher_polling_interval_msec = opt_var_map["thread-watcher-polling-interval-msec"].as<uint32_t>();
@@ -546,6 +558,7 @@ int ini_option::_setup_config_option(program_options::options_description& optio
 		("thread-pool-size",				program_options::value<int>(),			"thread pool size (dynamic)")
 		("proxy-prior-netmask",			program_options::value<uint32_t>(),	"proxy prior netmask")
 		("max-total-thread-queue",	program_options::value<uint32_t>(),	"max thread queue length (dynamic)")
+		("time-watcher-enabled",	program_options::value<bool>(), "time watcher enabled")
 		("time-watcher-polling-interval-msec",	program_options::value<uint32_t>(), "time watcher polling interval (msec)")
 		("storage-access-watch-threshold-warn-msec",		program_options::value<uint32_t>(), "threshold to log error when a thread accessing storage long time (msec)")
 		("storage-access-watch-threshold-ping-ng-msec",	program_options::value<uint32_t>(), "threshold to return ping ng when a thread accessing storage long time (msec)");

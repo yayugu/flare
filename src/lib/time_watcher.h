@@ -31,6 +31,7 @@ protected:
 	target_info_map                    _map;
 	pthread_mutex_t                    _map_mutex;
 	AtomicCounter                      _id_generator;
+	bool                               _is_polling;
 	shared_ptr<time_watcher_processor> _processor;
 	shared_ptr<boost::thread>          _thread;
 
