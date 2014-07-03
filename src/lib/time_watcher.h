@@ -37,7 +37,7 @@ protected:
 
 public:
 	time_watcher();
-	~time_watcher();
+	virtual ~time_watcher();
 	uint64_t register_target(timeval threshold, boost::function<void(timeval)>);
 	void unregister_target(uint64_t id);
 	target_info_map get_map();
