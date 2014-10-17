@@ -10,7 +10,7 @@ run()
 }
 
 run ${ACLOCAL:-aclocal} $ACLOCAL_OPTIONS
-run ${LIBTOOLIZE:-libtoolize} --copy --force
+run ${LIBTOOLIZE:-glibtoolize} --copy --force
 run ${AUTOHEADER:-autoheader}
 run ${AUTOMAKE:-automake} --add-missing --foreign --copy
 run ${AUTOCONF:-autoconf}
