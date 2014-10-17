@@ -19,3 +19,4 @@ Makefile.in
 /test/*.log
 /test/*.trs
 /test-driver
+.idea
