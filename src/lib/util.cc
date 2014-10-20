@@ -32,10 +32,10 @@ const char* util::strerror(int e) {
 
 #ifdef HAVE_GNU_STRERROR_R
 	char* p = strerror_r(e, buf, sizeof(buf));
-	shared_ptr<string> ptr(new string(p));
+	boost::shared_ptr<string> ptr(new string(p));
 #else
 	strerror_r(e, buf, sizeof(buf));
-	shared_ptr<string> ptr(new string(buf));
+	boost::shared_ptr<string> ptr(new string(buf));
 #endif // HAVE_GNU_STRERROR_R
 
 	pthread_mutex_lock(&mutex_msg_map);

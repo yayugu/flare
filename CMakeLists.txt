@@ -28,9 +28,11 @@ set_target_properties(flared PROPERTIES LINKER_LANGUAGE CXX)
 
 ## librariesa
 set(Boost_USE_STATIC_LIBS ON)
-set(BOOST_ROOT /Users/yuya.yaguchi/works/boost)
+#set(BOOST_ROOT /Users/yuya.yaguchi/works/boost)
+set(BOOST_ROOT /usr/local/Cellar/boost/1.56.0)
 find_package(Boost COMPONENTS program_options regex serialization thread REQUIRED)
-include_directories(/Users/yuya.yaguchi/works/boost/include)
+#include_directories(/Users/yuya.yaguchi/works/boost/include)
+include_directories(/usr/local/Cellar/boost/1.56.0/include)
 
 #set(Zlib_DIR /usr/local/Cellar/lzlib/1.6/)
 #find_package(Zlib REQUIRED)
@@ -56,3 +58,12 @@ target_link_libraries(flared
   /usr/local/lib/libuuid.a
   /usr/local/lib/libhashkit.a
 )
+
+
+## test
+
+#enable_testing()
+
+#include_directories("${PROJECT_SOURCE_DIR}/test/lib")
+#add_executable()
+

@@ -85,7 +85,7 @@ zookeeper_coordinator::~zookeeper_coordinator() {
 // {{{ public methods
 int zookeeper_coordinator::begin_operation(shared_operation& operation, const string& message) {
 	operation.reset();
-	shared_ptr<zk_operation> zkop = this->_take_operation();
+	boost::shared_ptr<zk_operation> zkop = this->_take_operation();
 
 	try {
 		if (!zkop) {
@@ -130,7 +130,7 @@ int zookeeper_coordinator::begin_operation(shared_operation& operation, const st
 }
 
 int zookeeper_coordinator::end_operation(shared_operation& operation) {
-	shared_ptr<zk_operation> zkop = dynamic_pointer_cast<zk_operation>(operation);
+	boost::shared_ptr<zk_operation> zkop = dynamic_pointer_cast<zk_operation>(operation);
 	log_notice("end operation: %s (%s)", zkop->get_message().c_str(), zkop->get_nickname().c_str());
 	operation.reset();
 	if (zkop->unlock() < 0) {
@@ -284,7 +284,7 @@ void zookeeper_coordinator::_close_zookeeper() {
 }
 
 shared_ptr<zookeeper_coordinator::zk_operation> zookeeper_coordinator::_take_operation() {
-	shared_ptr<zk_operation> zkop;
+	boost::shared_ptr<zk_operation> zkop;
 	pthread_mutex_lock(&(this->_mutex_operation_pool));
 	if (this->operation_pool.size() > 0) {
 		zkop = dynamic_pointer_cast<zk_operation>(this->operation_pool.front());

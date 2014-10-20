@@ -137,8 +137,8 @@ public:
 
 protected:
 	void _close_zookeeper();
-	shared_ptr<zk_operation> _new_operation();
-	shared_ptr<zk_operation> _take_operation();
+	boost::shared_ptr<zk_operation> _new_operation();
+	boost::shared_ptr<zk_operation> _take_operation();
 	void _put_operation(shared_ptr<zk_operation> zkop);
 	virtual void _handle_global_watch_event(int type, int state, const string& path);
 	virtual void _handle_nodemap_watch_event(int type, int state, const string& path);
