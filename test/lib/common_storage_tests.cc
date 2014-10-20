@@ -38,7 +38,7 @@ storage_tester::~storage_tester() {
 	delete this->_container;
 }
 
-// Helper function to get a given key
+// Helper boost::function to get a given key
 storage::result storage_tester::get(const std::string &key, std::string &value, int *flag, int *version, int b)  {
 	storage::result result;
 	storage::entry entry;
@@ -55,7 +55,7 @@ storage::result storage_tester::get(const std::string &key, std::string &value, 
 	return result;
 }
 
-// Helper function to set a key to a given value
+// Helper boost::function to set a key to a given value
 storage::result storage_tester::set(const std::string &key, const std::string &value, int flag, int behavior) {
 	storage::result result;
 	storage::entry entry;

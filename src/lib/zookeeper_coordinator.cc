@@ -23,7 +23,7 @@ namespace flare {
 #define ZNODENAME_INDEX_NODEMAP	"/index/nodemap"
 #define ZNODENAME_INDEX_META		"/index/meta"
 
-// {{{ global functions
+// {{{ global boost::functions
 // }}}
 
 // {{{ ctor/dtor
@@ -297,10 +297,10 @@ shared_ptr<zookeeper_coordinator::zk_operation> zookeeper_coordinator::_take_ope
 }
 
 shared_ptr<zookeeper_coordinator::zk_operation> zookeeper_coordinator::_new_operation() {
-	return (shared_ptr<zk_operation>(new zookeeper_coordinator::zk_operation(this, this->_connstring, string(ZNODENAME_INDEX_LOCK))));
+	return (boost::shared_ptr<zk_operation>(new zookeeper_coordinator::zk_operation(this, this->_connstring, string(ZNODENAME_INDEX_LOCK))));
 }
 
-void zookeeper_coordinator::_put_operation(shared_ptr<zk_operation> zkop) {
+void zookeeper_coordinator::_put_operation(boost::shared_ptr<zk_operation> zkop) {
 	pthread_mutex_lock(&(this->_mutex_operation_pool));
 	this->operation_pool.push_back(zkop);
 	pthread_mutex_unlock(&(this->_mutex_operation_pool));

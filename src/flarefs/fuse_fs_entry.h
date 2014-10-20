@@ -33,7 +33,7 @@ namespace flare {
 
 typedef class fuse_fs fuse_fs;
 typedef class fuse_fs_entry fuse_fs_entry;
-typedef shared_ptr<fuse_fs_entry> shared_fs_entry;   
+typedef boost::shared_ptr<fuse_fs_entry> shared_fs_entry;   
 
 namespace fuse_fs_entry_const {
 } // namespace fuse_fs_entry_const

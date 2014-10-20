@@ -14,7 +14,7 @@ namespace flare {
 
 static fuse_impl* fuse_obj = NULL;
 
-// {{{ global functions
+// {{{ global boost::functions
 int fuse_impl_getattr(const char* path, struct stat* st) {
 	return fuse_obj->getattr(path, st);
 }

@@ -85,7 +85,7 @@
 
   * bug fixes
     - fix connection::readline() to check the last character of a read buffer
-    - fix thread safety of utility functions
+    - fix thread safety of utility boost::functions
     - fix reconstruction-bwlimit option
 
 * [2012/03/24] 1.0.15 release
@@ -187,7 +187,7 @@
 * [2009/02/03] 1.0.8 release
 
   * bug fixes
-    - added lock around non-thread-safe function calls (fix random infinite loop and segfaults)
+    - added lock around non-thread-safe boost::function calls (fix random infinite loop and segfaults)
 
 * [2009/01/26] 1.0.7 release
 

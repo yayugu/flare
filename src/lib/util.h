@@ -108,7 +108,7 @@ typedef unsigned char uint8_t;
 #endif // HAVE_STDINT_H
 
 extern const char* const line_delimiter;
-typedef shared_array<uint8_t> shared_byte;
+typedef boost::shared_array<uint8_t> shared_byte;
 
 /**
  *	utility class (misc methods)

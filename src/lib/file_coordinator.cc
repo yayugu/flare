@@ -19,7 +19,7 @@
 namespace gree {
 namespace flare {
 
-// {{{ global functions
+// {{{ global boost::functions
 // }}}
 
 // {{{ ctor/dtor

@@ -12,7 +12,7 @@
 namespace gree {
 namespace flare {
 
-// {{{ global functions/variables
+// {{{ global boost::functions/variables
 stats* stats_object = NULL;
 status* status_object = NULL;
 // }}}

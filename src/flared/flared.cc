@@ -22,7 +22,7 @@ namespace flare {
 // This variable is set by main thread.
 static volatile sig_atomic_t reload_request = 0;
 
-// {{{ global functions
+// {{{ global boost::functions
 /**
  *	signal handler (SIGTERM/SIGINT)
  */

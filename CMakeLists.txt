@@ -2,8 +2,8 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
 project(flare CXX)
 
-SET(CMAKE_C_COMPILER   /usr/local/bin/gcc-4.8)
-SET(CMAKE_CXX_COMPILER /usr/local/bin/g++-4.8)
+SET(CMAKE_C_COMPILER   /usr/bin/clang)
+SET(CMAKE_CXX_COMPILER /usr/bin/clang++)
 
 ## flare
 
@@ -27,12 +27,14 @@ set_target_properties(flared PROPERTIES LINKER_LANGUAGE CXX)
 
 
 ## librariesa
-set(Boost_USE_STATIC_LIBS ON)
+#set(Boost_USE_STATIC_LIBS ON)
 #set(BOOST_ROOT /Users/yuya.yaguchi/works/boost)
-set(BOOST_ROOT /usr/local/Cellar/boost/1.56.0)
+#set(BOOST_ROOT /usr/local/Cellar/boost/1.56.0)
 find_package(Boost COMPONENTS program_options regex serialization thread REQUIRED)
+include_directories(${Boost_INCLUDE_DIR})
+link_directories(${Boost_LIBRARY_DIR})
 #include_directories(/Users/yuya.yaguchi/works/boost/include)
-include_directories(/usr/local/Cellar/boost/1.56.0/include)
+#include_directories(/usr/local/Cellar/boost/1.56.0/include)
 
 #set(Zlib_DIR /usr/local/Cellar/lzlib/1.6/)
 #find_package(Zlib REQUIRED)
@@ -41,19 +43,13 @@ include_directories(/usr/local/Cellar/boost/1.56.0/include)
 set(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -lz")
 
 target_link_libraries(flarei
-  ${Boost_PROGRAM_OPTIONS_LIBRARY}
-  ${Boost_REGEX_LIBRARY}
-  ${Boost_SERIALIZATION_LIBRARY}
-  ${Boost_THREAD_LIBRARY}
+  ${Boost_LIBRARIES}
   /usr/local/lib/libtokyocabinet.dylib
   /usr/local/lib/libuuid.a
   /usr/local/lib/libhashkit.a
 )
 target_link_libraries(flared
-  ${Boost_PROGRAM_OPTIONS_LIBRARY}
-  ${Boost_REGEX_LIBRARY}
-  ${Boost_SERIALIZATION_LIBRARY}
-  ${Boost_THREAD_LIBRARY}
+  ${Boost_LIBRARIES}
   /usr/local/lib/libtokyocabinet.dylib
   /usr/local/lib/libuuid.a
   /usr/local/lib/libhashkit.a
@@ -62,8 +58,7 @@ target_link_libraries(flared
 
 ## test
 
-#enable_testing()
-
+enable_testing()
 #include_directories("${PROJECT_SOURCE_DIR}/test/lib")
 #add_executable()
 

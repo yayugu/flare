@@ -118,7 +118,7 @@ AC_CHECK_HEADER(boost/atomic.hpp,
 # Checks for typedefs, structures, and compiler characteristics.
 
 
-# Checks for library functions.
+# Checks for library boost::functions.
 
 AC_COMPILE_CHECK(
 [whether we have __sync_fetch_and_add],
@@ -127,8 +127,8 @@ AC_COMPILE_CHECK(
 [AC_DEFINE([HAVE_SYNC_FETCH_AND_ADD],[1],[have __sync_fetch_and_add])]
 )
 
-AC_CHECK_FUNC(epoll_create, [AC_DEFINE([HAVE_EPOLL], [], [have epoll functions or not])])
-AC_CHECK_FUNC(kqueue, [AC_DEFINE([HAVE_KQUEUE], [], [have kqueue functions or not])])
+AC_CHECK_FUNC(epoll_create, [AC_DEFINE([HAVE_EPOLL], [], [have epoll boost::functions or not])])
+AC_CHECK_FUNC(kqueue, [AC_DEFINE([HAVE_KQUEUE], [], [have kqueue boost::functions or not])])
 AC_CHECK_DECLS([htonll, be64toh, betoh64, bswap64, bswap_64, __bswap_64], [], [], [
 #ifdef HAVE_ARPA_INET_H
 #	include <arpa/inet.h>

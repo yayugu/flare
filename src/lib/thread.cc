@@ -15,7 +15,7 @@
 namespace gree {
 namespace flare {
 
-// {{{ global functions
+// {{{ global boost::functions
 void* thread_run(void* p) {
 	thread* tmp = (thread*)p;
 	shared_thread t = tmp->get_shared_thread();

@@ -691,7 +691,7 @@ function main($arg_list) {
 	$parameter = array('qps' => $qps);
 
 	$f = "handleOp$op";
-	if (function_exists($f) == false) {
+	if (boost::function_exists($f) == false) {
 		print "operation [$op] is not yet supported\n";
 		return 0;
 	}

@@ -26,7 +26,7 @@ const char* const line_delimiter = "\r\n";
  *	strerror (thread safe)
  */
 const char* util::strerror(int e) {
-	static map<pthread_t, shared_ptr<string> > msg_map;
+	static map<pthread_t, boost::shared_ptr<string> > msg_map;
 	static pthread_mutex_t mutex_msg_map = PTHREAD_MUTEX_INITIALIZER; 
 	char buf[BUFSIZ];
 

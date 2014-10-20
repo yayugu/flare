@@ -171,7 +171,7 @@ Date:   Mon Jun 18 11:54:45 2012 +0900
     add hash_algorithm_adler32 for internal use
     apply noreply replication patch for high latency network
     fix connection::readline() to check the last charactor of a read buffer
-    fix thread safety of utility functions
+    fix thread safety of utility boost::functions
     adding test-util.cc
     fix reconstruction-bwlimit
     basic empty string test + basis for future tests
@@ -302,7 +302,7 @@ Date:   Tue Aug 16 00:28:23 2011 +0900
     Fix a hangup issue when flared or flarei got the SIGHUP signal.
     
     sa_hup_handler was not signal-safe because it called non-reentrant
-    functions. So flare just sets a flag in the signal handler, then calls
+    boost::functions. So flare just sets a flag in the signal handler, then calls
     reload action in the main loop.
 
 commit bbdc842796de8eb9191d213d10c5ee8be0862033
@@ -316,7 +316,7 @@ commit 5b8702b317c68a452c739e0aea415e23f372dc61
 Author: Yoshiyuki Asaba <yoshiyuki.asaba@gree.co.jp>
 Date:   Tue Aug 9 10:17:34 2011 +0900
 
-    Change shared_byte type from shared_ptr to shared_array to release memory properly.
+    Change shared_byte type from boost::shared_ptr to boost::shared_array to release memory properly.
 
 commit d08c6c3fb6abb03e25356ca97077df465fe1929b
 Author: Yoshiyuki Asaba <yoshiyuki.asaba@gree.co.jp>
@@ -725,7 +725,7 @@ Author: TAKANO Mitsuhiro <takano32@gmail.com>
 Date:   Wed Jul 14 12:27:52 2010 +0900
 
     src/lib/util.cc: remove warning.
-                     ‘buf_binary’ is used uninitialized in this function
+                     ‘buf_binary’ is used uninitialized in this boost::function
 
 commit 4e68440bacd1e5c01f994beac2355859bc5a40cd
 Author: Masaki Fujimoto <fujimoto@php.net>
@@ -961,7 +961,7 @@ commit 47ce63022cb74728893ee280e88826e8812e1463
 Author: Masaki Fujimoto <fujimoto@php.net>
 Date:   Tue Feb 3 19:00:16 2009 +0900
 
-    added lock around non-thread-safe function calls
+    added lock around non-thread-safe boost::function calls
 
 commit f08e8d4248ee31b2957b687702efe45c906c1f50
 Author: Masaki Fujimoto <fujimoto@php.net>

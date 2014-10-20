@@ -36,7 +36,7 @@ static string nickname(const string& id) {
 	}
 }
 
-// {{{ global functions
+// {{{ global boost::functions
 // }}}
 
 // {{{ ctor/dtor

@@ -139,7 +139,7 @@ protected:
 	void _close_zookeeper();
 	boost::shared_ptr<zk_operation> _new_operation();
 	boost::shared_ptr<zk_operation> _take_operation();
-	void _put_operation(shared_ptr<zk_operation> zkop);
+	void _put_operation(boost::shared_ptr<zk_operation> zkop);
 	virtual void _handle_global_watch_event(int type, int state, const string& path);
 	virtual void _handle_nodemap_watch_event(int type, int state, const string& path);
 	virtual void _handle_sync_completion_event(int rc, const string& value);

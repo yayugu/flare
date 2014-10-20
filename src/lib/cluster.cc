@@ -33,7 +33,7 @@
 namespace gree {
 namespace flare {
 
-// {{{ global functions
+// {{{ global boost::functions
 // }}}
 
 // {{{ ctor/dtor
@@ -1650,7 +1650,7 @@ int cluster::_broadcast(shared_thread_queue q, bool sync, vector<string> prior_n
 
 /**
  *	save node variables
- *  Note that this function doesn't acquire the lock for this->_node_map.
+ *  Note that this boost::function doesn't acquire the lock for this->_node_map.
  */
 int cluster::_save() {
 	if (this->_coordinator == NULL) {
@@ -1683,7 +1683,7 @@ int cluster::_save() {
 
 /**
  *	load node variables
- *  Note that this function doesn't acquire the lock for this->_node_map.
+ *  Note that this boost::function doesn't acquire the lock for this->_node_map.
  */
 int cluster::_load(bool update_monitor) {
 	if (this->_coordinator == NULL) {
