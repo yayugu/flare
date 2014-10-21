@@ -66,7 +66,7 @@ void time_watcher::stop() {
 		return;
 	}
 	this->_processor->request_shutdown();
-	this->_thread->detach();
+	this->_thread->join();
 	this->_thread.reset();
 	this->_processor.reset();
 	this->_is_polling = false;
