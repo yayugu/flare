@@ -214,7 +214,7 @@ class storage_tester
 		void remove_check(entry_type type, version_type version, int behaviors);
 		void get_check(entry_type type, version_type version, int behaviors);
 
-		// Helper functions
+		// Helper boost::functions
 		storage::result get(const std::string &key, std::string &data, int* flag  = 0, int* version = 0, int b = 0);
 		storage::result set(const std::string &key, const std::string &data, int flag = 0, int version = 0);
 		storage::result remove(const std::string &key, int b = 0);

@@ -15,7 +15,7 @@ namespace gree {
 namespace flare {
 
 time_watcher_processor::time_watcher_processor(
-	shared_ptr<time_watcher_processor> shared_this,
+	boost::shared_ptr<time_watcher_processor> shared_this,
 	time_watcher& time_watcher,
 	timeval polling_interval
 ):

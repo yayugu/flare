@@ -13,7 +13,7 @@ class time_watcher_target_info {
 public:
 	timeval                 timestamp;
 	timeval                 threshold;
-	function<void(timeval)> callback;
+	boost::function<void(timeval)> callback;
 };
 
 }	// namespace flare

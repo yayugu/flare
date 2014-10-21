@@ -131,7 +131,7 @@ public:
 	string get_host()   { return this->_uri.authorities.front().get<1>(); }
 	int get_port()      { return this->_uri.authorities.front().get<2>(); }
 	string get_path()   { return this->_uri.path; }
-	void set_update_handler(function<void (void)> fn) { this->_update_handler = fn; }
+	void set_update_handler(boost::function<void (void)> fn) { this->_update_handler = fn; }
 	int get_meta_variables(map<string,string>& variables);
 	zhandle_t* get_zhandle();
 

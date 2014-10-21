@@ -144,12 +144,12 @@ public:
 				}
 				break;
 			case hash_algorithm_crc32:
-				// Note that the result value isn't crc32 because this function returns 31-bit value.
+				// Note that the result value isn't crc32 because this boost::function returns 31-bit value.
 				// The initial value of crc32 is 0.
 				r = crc32(crc32(0L, Z_NULL, 0), (const Bytef*)p, strlen(p));
 				break;
 			case hash_algorithm_adler32:
-				// Note that the result value isn't adler32 because this function returns 31-bit value.
+				// Note that the result value isn't adler32 because this boost::function returns 31-bit value.
 				// The initial value of alder is 1.
 				r = adler32(adler32(0L, Z_NULL, 0), (const Bytef*)p, strlen(p));
 				break;

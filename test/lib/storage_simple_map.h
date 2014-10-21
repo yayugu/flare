@@ -79,7 +79,7 @@ public:
 	virtual type get_type() { return type_tch; };
 	virtual bool is_capable(capability c) { return false; };
 
-	// Helper functions for test
+	// Helper boost::functions for test
 	void set(const string& key, const string& value, int flag) {
 		storage::result result;
 		storage::entry entry;
