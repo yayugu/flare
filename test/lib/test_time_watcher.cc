@@ -78,6 +78,21 @@ void test_time_watcher_restart() {
 	cut_assert_true(fired2);
 }
 
+void test_time_watcher_long_polling_interval_sleep() {
+	tw->start(10000);
+	timeval started;
+	gettimeofday(&started, NULL);
+	time_util::sleep_timeval(time_util::msec_to_timeval(10));
+	tw->stop();
+	timeval stopped;
+	gettimeofday(&stopped, NULL);
+	timeval diff;
+	time_util::timer_sub(stopped, started, diff);
+
+	timeval expect_max = time_util::msec_to_timeval(50);
+	cut_assert_true(time_util::timer_is_bigger(expect_max, diff));
+}
+
 void cut_teardown() {
 	delete tw;
 }

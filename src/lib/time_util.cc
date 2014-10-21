@@ -18,6 +18,13 @@ timeval time_util::msec_to_timeval(uint32_t msec) {
 	return t;
 }
 
+timespec time_util::timeval_to_timespec(timeval &val) {
+	timespec spec;
+	spec.tv_sec = val.tv_sec;
+	spec.tv_nsec = val.tv_usec * 1000;
+	return spec;
+}
+
 void time_util::timer_sub(const timeval& a, const timeval& b, timeval& result) {
 	result.tv_sec = a.tv_sec - b.tv_sec;
 	result.tv_usec = a.tv_usec - b.tv_usec;

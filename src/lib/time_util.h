@@ -17,6 +17,7 @@ namespace flare {
 class time_util {
 public:
 	static timeval msec_to_timeval(uint32_t msec);
+	static timespec timeval_to_timespec(timeval& val);
 	static void sleep_timeval(const timeval& t);
 
 	// OSX doesn't have timersub() and timercmp()
