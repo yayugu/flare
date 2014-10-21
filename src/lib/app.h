@@ -63,6 +63,9 @@ namespace flare {
 extern stats* stats_object;
 extern status* status_object;
 
+class time_watcher;
+extern time_watcher* time_watcher_object;
+
 /**
  *	application base class
  */

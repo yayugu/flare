@@ -12,6 +12,7 @@
 #include "queue_proxy_read.h"
 #include "binary_request_header.h"
 #include "binary_response_header.h"
+#include "time_watcher_observer.h"
 
 namespace gree {
 namespace flare {
@@ -113,7 +114,11 @@ int op_get::_run_server() {
 		} else {
 			// storage i/o
 			storage::result r_storage;
-			if (this->_storage->get(*it, r_storage) < 0) {
+			storage_access_info info = {};
+			uint64_t tw_id = time_watcher_observer::register_on_storage_access_no_response_callback(info);
+			int retcode = this->_storage->get(*it, r_storage);
+			time_watcher_observer::unregister_on_storage_access_no_response_callback(tw_id);
+			if (retcode < 0) {
 				log_warning("storage i/o error (key=%s) -> continue processing (pretending not found)", it->key.c_str());
 				r_map[it->key] = storage::result_not_found;
 				continue;
