@@ -73,12 +73,12 @@ list(REMOVE_ITEM TEST_SRC ${PROJECT_SOURCE_DIR}/test/lib/test_storage_kch.cc)
 
 include_directories(/usr/local/Cellar/cutter/1.2.4/include/cutter)
 link_directories(/usr/local/lib)
-add_library(test
+add_library(cutter_test
   MODULE
   ${TEST_SRC}
   ${LIB_SRC}
 )
-target_link_libraries(test
+target_link_libraries(cutter_test
   ${Boost_LIBRARIES}
   /usr/local/lib/libtokyocabinet.dylib
   /usr/local/lib/libuuid.a
