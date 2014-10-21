@@ -13,7 +13,6 @@
 #include <pthread.h>
 #include "time_watcher_processor.h"
 #include "time_watcher_target_info.h"
-#include "util.h"
 
 using namespace std;
 using boost::shared_ptr;
@@ -30,7 +29,7 @@ public:
 protected:
 	target_info_map                    _map;
 	pthread_mutex_t                    _map_mutex;
-	AtomicCounter                      _id_generator;
+	uint64_t                           _id_last;
 	bool                               _is_polling;
 	boost::shared_ptr<time_watcher_processor> _processor;
 	boost::shared_ptr<boost::thread>          _thread;

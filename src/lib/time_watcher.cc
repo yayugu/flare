@@ -12,7 +12,7 @@ namespace flare {
 
 time_watcher::time_watcher():
 	_map(),
-	_id_generator(0),
+	_id_last(0),
 	_is_polling(false),
 	_processor(),
 	_thread() {
@@ -75,7 +75,7 @@ void time_watcher::stop() {
 uint64_t time_watcher::_generate_id() {
 	uint64_t id;
 	do {
-		id = this->_id_generator.incr();
+		id = this->_id_last++;
 	} while (this->_map.find(id) != this->_map.end());
 	return id;
 }
