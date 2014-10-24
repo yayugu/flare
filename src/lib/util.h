@@ -73,7 +73,7 @@ public:
 
 	inline uint64_t add(uint64_t n){
 #if defined(HAVE_LIBBOOST_ATOMIC)
-		return val.fetch_add(n,memory_order_relaxed);
+		return val.fetch_add(n,boost::memory_order_relaxed);
 #elif defined(HAVE_SYNC_FETCH_AND_ADD)
 		return __sync_fetch_and_add(&val,n);
 #elif defined(__GNUC__) && defined (__x86_64__)
@@ -107,7 +107,7 @@ typedef unsigned char uint8_t;
 #endif // HAVE_STDINT_H
 
 extern const char* const line_delimiter;
-typedef shared_array<uint8_t> shared_byte;
+typedef boost::shared_array<uint8_t> shared_byte;
 
 /**
  *	utility class (misc methods)
