@@ -64,22 +64,22 @@ int ini_option::load() {
 		return 0;
 	}
 
-	program_options::options_description cli_option("cli");
-	program_options::options_description config_option("config");
-	program_options::positional_options_description p;
-	program_options::variables_map opt_var_map;
+	boost::program_options::options_description cli_option("cli");
+	boost::program_options::options_description config_option("config");
+	boost::program_options::positional_options_description p;
+	boost::program_options::variables_map opt_var_map;
 
 	this->_setup_cli_option(cli_option);
 	this->_setup_config_option(config_option);
 
-	program_options::options_description option;
+	boost::program_options::options_description option;
 	option.add(cli_option).add(config_option);
 
 	// parse cli option
 	try {
-		program_options::store(program_options::command_line_parser(this->_argc, this->_argv).options(option).positional(p).run(), opt_var_map);
-		program_options::notify(opt_var_map);
-	} catch (program_options::error e) {
+		boost::program_options::store(boost::program_options::command_line_parser(this->_argc, this->_argv).options(option).positional(p).run(), opt_var_map);
+		boost::program_options::notify(opt_var_map);
+	} catch (boost::program_options::error e) {
 		cout << e.what() << endl;
 		cout << option << endl;
 		return -1;
@@ -109,12 +109,12 @@ int ini_option::load() {
 				cout << this->_config_path << " not found" << endl;
 				throw -1;
 			}
-			program_options::store(program_options::parse_config_file(ifs, config_option), opt_var_map);
-			program_options::notify(opt_var_map);
+			boost::program_options::store(boost::program_options::parse_config_file(ifs, config_option), opt_var_map);
+			boost::program_options::notify(opt_var_map);
 		} catch (int e) {
 			cout << option << endl;
 			return -1;
-		} catch (program_options::error e) {
+		} catch (boost::program_options::error e) {
 			cout << e.what() << endl;
 			cout << option << endl;
 			return -1;
@@ -237,12 +237,12 @@ int ini_option::reload() {
 		return 0;
 	}
 
-	program_options::options_description config_option("config");
-	program_options::variables_map opt_var_map;
+	boost::program_options::options_description config_option("config");
+	boost::program_options::variables_map opt_var_map;
 
 	this->_setup_config_option(config_option);
 
-	program_options::options_description option;
+	boost::program_options::options_description option;
 	option.add(config_option);
 
 	// parse config file
@@ -253,14 +253,14 @@ int ini_option::reload() {
 				cout << this->_config_path << " not found" << endl;
 				throw -1;
 			}
-			program_options::store(program_options::parse_config_file(ifs, config_option), opt_var_map);
-			program_options::notify(opt_var_map);
+			boost::program_options::store(boost::program_options::parse_config_file(ifs, config_option), opt_var_map);
+			boost::program_options::notify(opt_var_map);
 		} catch (int e) {
 			ostringstream ss;
 			ss << option << endl;
 			log_warning("%s", ss.str().c_str());
 			return -1;
-		} catch (program_options::error e) {
+		} catch (boost::program_options::error e) {
 			ostringstream ss;
 			ss << e.what() << endl;
 			ss << option << endl;
@@ -322,10 +322,10 @@ int ini_option::reload() {
 /**
  *	setup cli option
  */
-int ini_option::_setup_cli_option(program_options::options_description& option) {
+int ini_option::_setup_cli_option(boost::program_options::options_description& option) {
 	option.add_options()
-		("config,f",					program_options::value<string>(),	"path to config file")
-		("pid,p",							program_options::value<string>(),	"path to pid file")
+		("config,f",					boost::program_options::value<string>(),	"path to config file")
+		("pid,p",							boost::program_options::value<string>(),	"path to pid file")
 		("version,v",																						"display version")
 		("help,h",																							"display this help");
 
@@ -335,26 +335,26 @@ int ini_option::_setup_cli_option(program_options::options_description& option) 
 /**
  *	setup config option
  */
-int ini_option::_setup_config_option(program_options::options_description& option) {
+int ini_option::_setup_config_option(boost::program_options::options_description& option) {
 	option.add_options()
 		("daemonize",																										"run as daemon")
-		("data-dir",								program_options::value<string>(), 	"data directory")
-		("log-facility",						program_options::value<string>(), 	"log facility (dynamic)")
-		("max-connection",					program_options::value<int>(),			"max concurrent connections to accept (dynamic)")
-		("monitor-threshold",				program_options::value<int>(),			"node server monitoring threshold (dynamic)")
-		("monitor-interval",				program_options::value<int>(),			"node server monitoring interval (sec) (dynamic)")
-		("monitor-read-timeout",		program_options::value<int>(),			"node server monitoring read timeout (millisec) (dynamic)")
-		("partition-modular-hint",	program_options::value<int>(),			"partitioning hint (only for partition-type=modular)")
-		("partition-modular-virtual",	program_options::value<int>(),		"partitioning virtual node size (only for partition-type=modular)")
-		("key-hash-algorithm",			program_options::value<string>(),		"key hash algorithm")
-		("partition-size",					program_options::value<int>(),			"max partition size")
-		("partition-type",					program_options::value<string>(),		"partition type (modular: simple algorithm base)")
-		("server-name",							program_options::value<string>(),		"my server name")
-		("server-port",							program_options::value<int>(),			"my server port")
-		("server-socket",						program_options::value<string>(),		"my server unix domain socket (optional)")
-		("stack-size",							program_options::value<int>(),			"thread stack size (kb)")
-		("thread-pool-size",				program_options::value<int>(),			"thread pool size (dynamic)")
-		("index-db",								program_options::value<string>(),		"coordination database identifier");
+		("data-dir",								boost::program_options::value<string>(), 	"data directory")
+		("log-facility",						boost::program_options::value<string>(), 	"log facility (dynamic)")
+		("max-connection",					boost::program_options::value<int>(),			"max concurrent connections to accept (dynamic)")
+		("monitor-threshold",				boost::program_options::value<int>(),			"node server monitoring threshold (dynamic)")
+		("monitor-interval",				boost::program_options::value<int>(),			"node server monitoring interval (sec) (dynamic)")
+		("monitor-read-timeout",		boost::program_options::value<int>(),			"node server monitoring read timeout (millisec) (dynamic)")
+		("partition-modular-hint",	boost::program_options::value<int>(),			"partitioning hint (only for partition-type=modular)")
+		("partition-modular-virtual",	boost::program_options::value<int>(),		"partitioning virtual node size (only for partition-type=modular)")
+		("key-hash-algorithm",			boost::program_options::value<string>(),		"key hash algorithm")
+		("partition-size",					boost::program_options::value<int>(),			"max partition size")
+		("partition-type",					boost::program_options::value<string>(),		"partition type (modular: simple algorithm base)")
+		("server-name",							boost::program_options::value<string>(),		"my server name")
+		("server-port",							boost::program_options::value<int>(),			"my server port")
+		("server-socket",						boost::program_options::value<string>(),		"my server unix domain socket (optional)")
+		("stack-size",							boost::program_options::value<int>(),			"thread stack size (kb)")
+		("thread-pool-size",				boost::program_options::value<int>(),			"thread pool size (dynamic)")
+		("index-db",								boost::program_options::value<string>(),		"coordination database identifier");
 
 	return 0;
 }

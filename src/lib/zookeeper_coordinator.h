@@ -105,7 +105,7 @@ private:
 	string						_connstring;
 	zhandle_t*				_zhandle;
 	clientid_t				_client_id;
-	function<void (void)>	_update_handler;
+	boost::function<void (void)>	_update_handler;
 	pthread_mutex_t		_mutex_sync_nodemap;
 	pthread_cond_t		_cond_sync_nodemap;
 	bool							_sync_nodemap;
@@ -131,15 +131,15 @@ public:
 	string get_host()   { return this->_uri.authorities.front().get<1>(); }
 	int get_port()      { return this->_uri.authorities.front().get<2>(); }
 	string get_path()   { return this->_uri.path; }
-	void set_update_handler(function<void (void)> fn) { this->_update_handler = fn; }
+	void set_update_handler(boost::function<void (void)> fn) { this->_update_handler = fn; }
 	int get_meta_variables(map<string,string>& variables);
 	zhandle_t* get_zhandle();
 
 protected:
 	void _close_zookeeper();
-	shared_ptr<zk_operation> _new_operation();
-	shared_ptr<zk_operation> _take_operation();
-	void _put_operation(shared_ptr<zk_operation> zkop);
+	boost::shared_ptr<zk_operation> _new_operation();
+	boost::shared_ptr<zk_operation> _take_operation();
+	void _put_operation(boost::shared_ptr<zk_operation> zkop);
 	virtual void _handle_global_watch_event(int type, int state, const string& path);
 	virtual void _handle_nodemap_watch_event(int type, int state, const string& path);
 	virtual void _handle_sync_completion_event(int rc, const string& value);

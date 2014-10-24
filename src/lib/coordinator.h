@@ -32,7 +32,7 @@ public:
 	public:
 		coordinator* get_coordinator();
 	};
-	typedef shared_ptr<operation> shared_operation;
+	typedef boost::shared_ptr<operation> shared_operation;
 
 protected:
 	struct uri {
@@ -81,7 +81,7 @@ public:
 	virtual int end_operation(shared_operation& operation) { return 0; }
 	virtual int store_state(const string& flare_xml) = 0;
 	virtual int restore_state(string& flare_xml) = 0;
-	virtual void set_update_handler(function<void ()> fn) {}
+	virtual void set_update_handler(boost::function<void ()> fn) {}
 	virtual int get_meta_variables(map<string,string>& variables) {	return 0; }
 
 	int begin_operation(shared_operation& operation) { return begin_operation(operation, ""); }

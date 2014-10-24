@@ -42,10 +42,10 @@ typedef class op_proxy_write op_proxy_write;
 typedef class op_proxy_read op_proxy_read;
 
 typedef class queue_proxy_read queue_proxy_read;
-typedef shared_ptr<queue_proxy_read> shared_queue_proxy_read;
+typedef boost::shared_ptr<queue_proxy_read> shared_queue_proxy_read;
 
 typedef class queue_proxy_write queue_proxy_write;
-typedef shared_ptr<queue_proxy_write> shared_queue_proxy_write;
+typedef boost::shared_ptr<queue_proxy_write> shared_queue_proxy_write;
 
 /**
  *	cluster class

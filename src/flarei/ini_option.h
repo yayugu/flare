@@ -90,8 +90,8 @@ public:
 	string get_index_db() { return this->_index_db; };
 
 private:
-	int _setup_cli_option(program_options::options_description& option);
-	int _setup_config_option(program_options:: options_description& option);
+	int _setup_cli_option(boost::program_options::options_description& option);
+	int _setup_config_option(boost::program_options:: options_description& option);
 };
 
 }	// namespace flare

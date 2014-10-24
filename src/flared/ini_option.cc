@@ -85,22 +85,22 @@ int ini_option::load() {
 		return 0;
 	}
 
-	program_options::options_description cli_option("cli");
-	program_options::options_description config_option("config");
-	program_options::positional_options_description p;
-	program_options::variables_map opt_var_map;
+	boost::program_options::options_description cli_option("cli");
+	boost::program_options::options_description config_option("config");
+	boost::program_options::positional_options_description p;
+	boost::program_options::variables_map opt_var_map;
 
 	this->_setup_cli_option(cli_option);
 	this->_setup_config_option(config_option);
 
-	program_options::options_description option;
+	boost::program_options::options_description option;
 	option.add(cli_option).add(config_option);
 
 	// parse cli option
 	try {
-		program_options::store(program_options::command_line_parser(this->_argc, this->_argv).options(option).positional(p).run(), opt_var_map);
-		program_options::notify(opt_var_map);
-	} catch (program_options::error e) {
+		boost::program_options::store(boost::program_options::command_line_parser(this->_argc, this->_argv).options(option).positional(p).run(), opt_var_map);
+		boost::program_options::notify(opt_var_map);
+	} catch (boost::program_options::error e) {
 		cout << e.what() << endl;
 		cout << option << endl;
 		return -1;
@@ -130,12 +130,12 @@ int ini_option::load() {
 				cout << this->_config_path << " not found" << endl;
 				throw -1;
 			}
-			program_options::store(program_options::parse_config_file(ifs, config_option), opt_var_map);
-			program_options::notify(opt_var_map);
+			boost::program_options::store(boost::program_options::parse_config_file(ifs, config_option), opt_var_map);
+			boost::program_options::notify(opt_var_map);
 		} catch (int e) {
 			cout << option << endl;
 			return -1;
-		} catch (program_options::error e) {
+		} catch (boost::program_options::error e) {
 			cout << e.what() << endl;
 			cout << option << endl;
 			return -1;
@@ -335,12 +335,12 @@ int ini_option::reload() {
 		return 0;
 	}
 
-	program_options::options_description config_option("config");
-	program_options::variables_map opt_var_map;
+	boost::program_options::options_description config_option("config");
+	boost::program_options::variables_map opt_var_map;
 
 	this->_setup_config_option(config_option);
 
-	program_options::options_description option;
+	boost::program_options::options_description option;
 	option.add(config_option);
 
 	// parse config file
@@ -351,14 +351,14 @@ int ini_option::reload() {
 				cout << this->_config_path << " not found" << endl;
 				throw -1;
 			}
-			program_options::store(program_options::parse_config_file(ifs, config_option), opt_var_map);
-			program_options::notify(opt_var_map);
+			boost::program_options::store(boost::program_options::parse_config_file(ifs, config_option), opt_var_map);
+			boost::program_options::notify(opt_var_map);
 		} catch (int e) {
 			ostringstream ss;
 			ss << option << endl;
 			log_warning("%s", ss.str().c_str());
 			return -1;
-		} catch (program_options::error e) {
+		} catch (boost::program_options::error e) {
 			ostringstream ss;
 			ss << e.what() << endl;
 			ss << option << endl;
@@ -463,10 +463,10 @@ int ini_option::reload() {
 /**
  *	setup cli option
  */
-int ini_option::_setup_cli_option(program_options::options_description& option) {
+int ini_option::_setup_cli_option(boost::program_options::options_description& option) {
 	option.add_options()
-		("config,f",					program_options::value<string>(),	"path to config file")
-		("pid,p",							program_options::value<string>(),	"path to pid file")
+		("config,f",					boost::program_options::value<string>(),	"path to config file")
+		("pid,p",							boost::program_options::value<string>(),	"path to pid file")
 		("version,v",																						"display version")
 		("help,h",																							"display this help");
 
@@ -476,53 +476,53 @@ int ini_option::_setup_cli_option(program_options::options_description& option) 
 /**
  *	setup config option
  */
-int ini_option::_setup_config_option(program_options::options_description& option) {
+int ini_option::_setup_config_option(boost::program_options::options_description& option) {
 	option.add_options()
-		("back-log",								program_options::value<int>(),			"back log")
+		("back-log",								boost::program_options::value<int>(),			"back log")
 		("daemonize",																										"run as daemon")
-		("data-dir",								program_options::value<string>(),		"data directory")
-		("index-servers",						program_options::value<string>(),		"index servers (name:port,...)")
-		("index-server-name",				program_options::value<string>(),		"index server name")
-		("index-server-port",				program_options::value<int>(),	 		"index server port")
-		("log-facility",						program_options::value<string>(),		"log facility (dynamic)")
-		("max-connection",					program_options::value<int>(),			"max concurrent connections to accept (dynamic)")
-		("mutex-slot",							program_options::value<int>(),			"mutex slot size for storage I/O")
+		("data-dir",								boost::program_options::value<string>(),		"data directory")
+		("index-servers",						boost::program_options::value<string>(),		"index servers (name:port,...)")
+		("index-server-name",				boost::program_options::value<string>(),		"index server name")
+		("index-server-port",				boost::program_options::value<int>(),	 		"index server port")
+		("log-facility",						boost::program_options::value<string>(),		"log facility (dynamic)")
+		("max-connection",					boost::program_options::value<int>(),			"max concurrent connections to accept (dynamic)")
+		("mutex-slot",							boost::program_options::value<int>(),			"mutex slot size for storage I/O")
 #ifdef ENABLE_MYSQL_REPLICATION
 		("mysql-replication",																						"enable mysql replication")
-		("mysql-replication-port",	program_options::value<int>(),			"mysql replication port")
-		("mysql-replication-id",		program_options::value<uint32_t>(),	"mysql replication server id")
-		("mysql-replication-db",		program_options::value<string>(),		"mysql replication database")
-		("mysql-replication-table",	program_options::value<string>(),		"mysql replication table")
+		("mysql-replication-port",	boost::program_options::value<int>(),			"mysql replication port")
+		("mysql-replication-id",		boost::program_options::value<uint32_t>(),	"mysql replication server id")
+		("mysql-replication-db",		boost::program_options::value<string>(),		"mysql replication database")
+		("mysql-replication-table",	boost::program_options::value<string>(),		"mysql replication table")
 #endif
-		("noreply-window-limit",		program_options::value<int>(),			"noreply window limit")
-		("net-read-timeout",				program_options::value<int>(),			"network read timeout (sec) (dynamic)")
-		("proxy-concurrency",				program_options::value<int>(),			"proxy request concurrency for each node")
-		("reconstruction-interval",	program_options::value<int>(),			"master/slave dump interval in usec (dynamic)")
-		("reconstruction-bwlimit",	program_options::value<int>(),			"master/slave dump limit I/O bandwidth; KBytes per second (dynamic)")
-		("replication-type",				program_options::value<string>(),		"replication type (async, sync) (dynamic)")
-		("server-name",							program_options::value<string>(),		"my server name")
-		("server-port",							program_options::value<int>(),			"my server port")
-		("server-socket",						program_options::value<string>(),		"my server unix domain socket (optional)")
-		("stack-size",							program_options::value<int>(),			"thread stack size (kb)")
-		("storage-ap",							program_options::value<uint32_t>(),	"storage size of record alignment by power of 2 (tch)")
-		("storage-fp",							program_options::value<uint32_t>(),	"storage size of free block pool by power of 2 (tch)")
-		("storage-bucket-size",			program_options::value<uint64_t>(),	"number of elements of the bucket array (tch)")
-		("storage-cache-size",			program_options::value<int>(),			"storage header cache size")
-		("storage-compress",				program_options::value<string>(),		"storage compress type (deflate, bz2, tcbs) (tch)")
+		("noreply-window-limit",		boost::program_options::value<int>(),			"noreply window limit")
+		("net-read-timeout",				boost::program_options::value<int>(),			"network read timeout (sec) (dynamic)")
+		("proxy-concurrency",				boost::program_options::value<int>(),			"proxy request concurrency for each node")
+		("reconstruction-interval",	boost::program_options::value<int>(),			"master/slave dump interval in usec (dynamic)")
+		("reconstruction-bwlimit",	boost::program_options::value<int>(),			"master/slave dump limit I/O bandwidth; KBytes per second (dynamic)")
+		("replication-type",				boost::program_options::value<string>(),		"replication type (async, sync) (dynamic)")
+		("server-name",							boost::program_options::value<string>(),		"my server name")
+		("server-port",							boost::program_options::value<int>(),			"my server port")
+		("server-socket",						boost::program_options::value<string>(),		"my server unix domain socket (optional)")
+		("stack-size",							boost::program_options::value<int>(),			"thread stack size (kb)")
+		("storage-ap",							boost::program_options::value<uint32_t>(),	"storage size of record alignment by power of 2 (tch)")
+		("storage-fp",							boost::program_options::value<uint32_t>(),	"storage size of free block pool by power of 2 (tch)")
+		("storage-bucket-size",			boost::program_options::value<uint64_t>(),	"number of elements of the bucket array (tch)")
+		("storage-cache-size",			boost::program_options::value<int>(),			"storage header cache size")
+		("storage-compress",				boost::program_options::value<string>(),		"storage compress type (deflate, bz2, tcbs) (tch)")
 		("storage-large",																								"use large storage (tch)")
-		("storage-lmemb",						program_options::value<int>(),			"number of members in each leaf page (tcb)")
-		("storage-nmemb",						program_options::value<int>(),			"number of members in each non-leaf page (tcb")
-		("storage-dfunit",					program_options::value<int32_t>(),	"unit step number of auto defragmentation of a database object (tch/tcb)")
-		("storage-type",						program_options::value<string>(),		"storage type (tch:tokyo cabinet hash database, tcb:tokyo cabinet b+tree database, kch:kyoto cabinet hash database)")
-		("thread-pool-size",				program_options::value<int>(),			"thread pool size (dynamic)")
-		("proxy-prior-netmask",			program_options::value<uint32_t>(),	"proxy prior netmask")
-		("max-total-thread-queue",	program_options::value<uint32_t>(),	"max thread queue length (dynamic)");
+		("storage-lmemb",						boost::program_options::value<int>(),			"number of members in each leaf page (tcb)")
+		("storage-nmemb",						boost::program_options::value<int>(),			"number of members in each non-leaf page (tcb")
+		("storage-dfunit",					boost::program_options::value<int32_t>(),	"unit step number of auto defragmentation of a database object (tch/tcb)")
+		("storage-type",						boost::program_options::value<string>(),		"storage type (tch:tokyo cabinet hash database, tcb:tokyo cabinet b+tree database, kch:kyoto cabinet hash database)")
+		("thread-pool-size",				boost::program_options::value<int>(),			"thread pool size (dynamic)")
+		("proxy-prior-netmask",			boost::program_options::value<uint32_t>(),	"proxy prior netmask")
+		("max-total-thread-queue",	boost::program_options::value<uint32_t>(),	"max thread queue length (dynamic)");
 
 	return 0;
 }
 
 
-int ini_option::_process_index_servers(program_options::variables_map& opt_var_map) {
+int ini_option::_process_index_servers(boost::program_options::variables_map& opt_var_map) {
 	vector<cluster::index_server> v;
 	if (opt_var_map.count("index-servers")) {
 		static const char * pattern = ",?\\s*([^,:\\s]+):(\\d+)";

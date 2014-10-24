@@ -147,9 +147,9 @@ public:
 	uint32_t get_max_total_thread_queue() { return this->_max_total_thread_queue; };
 
 private:
-	int _setup_cli_option(program_options::options_description& option);
-	int _setup_config_option(program_options:: options_description& option);
-	int _process_index_servers(program_options::variables_map& opt_var_map);
+	int _setup_cli_option(boost::program_options::options_description& option);
+	int _setup_config_option(boost::program_options:: options_description& option);
+	int _process_index_servers(boost::program_options::variables_map& opt_var_map);
 };
 
 }	// namespace flare

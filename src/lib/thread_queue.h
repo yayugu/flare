@@ -23,7 +23,7 @@ namespace gree {
 namespace flare {
 
 typedef class thread_queue thread_queue;
-typedef shared_ptr<thread_queue> shared_thread_queue;
+typedef boost::shared_ptr<thread_queue> shared_thread_queue;
 
 /**
  *	thread queue base class
