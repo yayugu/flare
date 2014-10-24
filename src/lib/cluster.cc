@@ -1664,7 +1664,7 @@ int cluster::_save() {
 	ostringstream oss;
 	// creating scope to destroy xml_oarchive object before ostringstream::close();
 	{
-		archive::xml_oarchive oa(oss);
+		boost::archive::xml_oarchive oa(oss);
 		oa << boost::serialization::make_nvp("version", (const uint64_t&)this->_node_map_version);
 		oa << boost::serialization::make_nvp("node_map", (const node_map&)this->_node_map);
 		oa << boost::serialization::make_nvp("thread_type", (const int&)this->_thread_type);
@@ -1703,18 +1703,18 @@ int cluster::_load(bool update_monitor) {
 	if (!flare_xml.empty()) {
 		try {
 			istringstream iss(flare_xml);
-			archive::xml_iarchive ia(iss);
+			boost::archive::xml_iarchive ia(iss);
 			ia >> boost::serialization::make_nvp("version", this->_node_map_version);
 			ia >> boost::serialization::make_nvp("node_map", this->_node_map);
 			ia >> boost::serialization::make_nvp("thread_type", this->_thread_type);
-		} catch (archive::archive_exception& e) {
+		} catch (boost::archive::archive_exception& e) {
 			try {
 				istringstream iss(flare_xml);
-				archive::xml_iarchive ia(iss);
+				boost::archive::xml_iarchive ia(iss);
 				this->_node_map_version = 0;
 				ia >> boost::serialization::make_nvp("node_map", this->_node_map);
 				ia >> boost::serialization::make_nvp("thread_type", this->_thread_type);
-			} catch (archive::archive_exception& e) {
+			} catch (boost::archive::archive_exception& e) {
 				pthread_mutex_unlock(&this->_mutex_serialization);
 				log_err("invalid XML format", 0);
 				return -1;
