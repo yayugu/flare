@@ -532,7 +532,7 @@ int ini_option::_process_index_servers(boost::program_options::variables_map& op
 		string::const_iterator start = index_servers.begin();
 		string::const_iterator end = index_servers.end();
 
-		while (regex_search(start, end, match, e)) {
+		while (boost::regex_search(start, end, match, e)) {
 			string index_server_name = match.str(1);
 			int index_server_port = default_index_server_port;
 			try {

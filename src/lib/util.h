@@ -167,9 +167,9 @@ unsigned int util::next_digit(const char* src, char* dst, unsigned int dst_len) 
 
 bool util::is_unsigned_integer_string(const string s) {
 	const char *pattern = "\\A[0-9]+\\z";
-	const regex e(pattern);
+	const boost::regex e(pattern);
 
-	return regex_match(s, e);
+	return boost::regex_match(s, e);
 }
 
 template<class T> string util::vector_join(vector<T> list, string glue) {

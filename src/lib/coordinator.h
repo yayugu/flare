@@ -52,9 +52,9 @@ protected:
 				"((?:([^:/@]*)@)?([^:@/]*)(?::(\\d+))?)"   // authority = [user-info@]host[:port]
 				"(/[^\\?]*)(?:\\?([^#]*))?(?:#(.*))?\\z";    // body = [path?query#fragment]
 
-			static const regex e(pattern);
-			smatch match;
-			regex_match(s, match, e);
+			static const boost::regex e(pattern);
+			boost::smatch match;
+			boost::regex_match(s, match, e);
 			this->scheme    = match[1].str();
 			this->authority = match[2].str();
 			this->user      = match[3].str();

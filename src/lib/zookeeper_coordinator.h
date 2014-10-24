@@ -71,7 +71,7 @@ protected:
 			vector<string> authstrings;
 			static const boost::regex e(pattern);
 			boost::smatch match;
-			regex_match(s, match, e);
+			boost::regex_match(s, match, e);
 			this->scheme    = match[1].str();
 			authstrings.push_back(match[2].str());
 			for (int i = 3; i < 7; i++) {
@@ -82,7 +82,7 @@ protected:
 			for(vector<string>::iterator it = authstrings.begin(); it != authstrings.end(); it++) {
 				static const boost::regex auth_e(auth_pattern);
 				boost::smatch auth_match;
-				regex_match(*it, auth_match, auth_e);
+				boost::regex_match(*it, auth_match, auth_e);
 				string user      = auth_match[1].str();
 				string host      = auth_match[2].str();
 				int port         = 0;

@@ -260,7 +260,7 @@ namespace test_zookeeper_coordinator {
 		string::const_iterator end = index_servers.end();
 
 		vector<string> v;
-		while (regex_search(start, end, match, e)) {
+		while (boost::regex_search(start, end, match, e)) {
 			v.push_back(match.str(1)+":"+match.str(2));
 			start = match[0].second;
 		}
