@@ -61,8 +61,8 @@ protected:
 			this->host      = match[4].str();
 			this->port      = 0;
 			try {
-				this->port    = lexical_cast<int>(match[5].str());
-			} catch (bad_lexical_cast& e) {
+				this->port    = boost::lexical_cast<int>(match[5].str());
+			} catch (boost::bad_lexical_cast& e) {
 				;
 			}
 			this->path      = match[6].str();

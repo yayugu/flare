@@ -87,8 +87,8 @@ protected:
 				string host      = auth_match[2].str();
 				int port         = 0;
 				try {
-					port           = lexical_cast<int>(auth_match[3].str());
-				} catch (bad_lexical_cast& e) {}
+					port           = boost::lexical_cast<int>(auth_match[3].str());
+				} catch (boost::bad_lexical_cast& e) {}
 				authorities.push_back(make_tuple(user, host, port));
 			}
 

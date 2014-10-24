@@ -119,7 +119,7 @@ int cluster::node::parse(const char* p) {
 			log_warning("no server port (required)", 0);
 			return -1;
 		}
-		this->node_server_port = lexical_cast<int>(q);
+		this->node_server_port = boost::lexical_cast<int>(q);
 
 		// node_role
 		i += util::next_digit(p+i, q, sizeof(q));
@@ -127,7 +127,7 @@ int cluster::node::parse(const char* p) {
 			log_warning("no role (required)", 0);
 			return -1;
 		}
-		this->node_role = static_cast<cluster::role>(lexical_cast<int>(q));
+		this->node_role = static_cast<cluster::role>(boost::lexical_cast<int>(q));
 
 		// node_state
 		i += util::next_digit(p+i, q, sizeof(q));
@@ -135,7 +135,7 @@ int cluster::node::parse(const char* p) {
 			log_warning("no state (required)", 0);
 			return -1;
 		}
-		this->node_state = static_cast<cluster::state>(lexical_cast<int>(q));
+		this->node_state = static_cast<cluster::state>(boost::lexical_cast<int>(q));
 
 		// node_partition
 		i += util::next_digit(p+i, q, sizeof(q));
@@ -143,7 +143,7 @@ int cluster::node::parse(const char* p) {
 			log_warning("no partition (required)", 0);
 			return -1;
 		}
-		this->node_partition = lexical_cast<int>(q);
+		this->node_partition = boost::lexical_cast<int>(q);
 
 		// node_balance
 		i += util::next_digit(p+i, q, sizeof(q));
@@ -151,7 +151,7 @@ int cluster::node::parse(const char* p) {
 			log_warning("no balance (required)", 0);
 			return -1;
 		}
-		this->node_balance = lexical_cast<int>(q);
+		this->node_balance = boost::lexical_cast<int>(q);
 
 		// node_thread_type
 		i += util::next_digit(p+i, q, sizeof(q));
@@ -159,8 +159,8 @@ int cluster::node::parse(const char* p) {
 			log_warning("no thread_type (required)", 0);
 			return -1;
 		}
-		this->node_thread_type = lexical_cast<int>(q);
-	} catch (bad_lexical_cast e) {
+		this->node_thread_type = boost::lexical_cast<int>(q);
+	} catch (boost::bad_lexical_cast e) {
 		log_warning("invalid digit [%s]", e.what());
 		return -1;
 	}

@@ -192,7 +192,7 @@ template<class T> vector<T> util::vector_split(string s, string sep) {
 	boost::char_separator<char> separator(sep.c_str());
 	tokenizer token_list(s, separator);
 	for (tokenizer::iterator it = token_list.begin(); it != token_list.end(); it++) {
-		r.push_back(lexical_cast<T>(*it));
+		r.push_back(boost::lexical_cast<T>(*it));
 	}
 
 	return r;

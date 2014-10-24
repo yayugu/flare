@@ -267,7 +267,7 @@ public:
 	int get_noreply_window_limit() { return this->_noreply_window_limit; }
 
 	inline string to_node_key(string server_name, int server_port) {
-		string node_key = server_name + ":" + lexical_cast<string>(server_port);
+		string node_key = server_name + ":" + boost::lexical_cast<string>(server_port);
 		return node_key;
 	};
 
@@ -278,8 +278,8 @@ public:
 		}
 		server_name = node_key.substr(0, n);
 		try {
-			server_port = lexical_cast<int>(node_key.substr(n+1));
-		} catch (bad_lexical_cast e) {
+			server_port = boost::lexical_cast<int>(node_key.substr(n+1));
+		} catch (boost::bad_lexical_cast e) {
 			return -1;
 		}
 		return 0;
