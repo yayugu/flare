@@ -167,7 +167,7 @@ namespace test_zookeeper_coordinator {
 
 		thread_group tg;
 		for (int i = 0; i < 10; i++) {
-			tg.create_thread(bind(&many_locker_main, cut_get_current_test_context(), i));
+			tg.create_thread(boost::bind(&many_locker_main, cut_get_current_test_context(), i));
 		}
 		tg.join_all();
 	}
@@ -177,7 +177,7 @@ namespace test_zookeeper_coordinator {
 
 		thread_group tg;
 		for (int i = 0; i < 50; i++) {
-			tg.create_thread(bind(&many_locker_main, cut_get_current_test_context(), i));
+			tg.create_thread(boost::bind(&many_locker_main, cut_get_current_test_context(), i));
 		}
 		tg.join_all();
 	}
@@ -222,7 +222,7 @@ namespace test_zookeeper_coordinator {
 
 		thread_group tg;
 		for (int i = 0; i < 50; i++) {
-			tg.create_thread(bind(&store_and_restore, cut_get_current_test_context(), i));
+			tg.create_thread(boost::bind(&store_and_restore, cut_get_current_test_context(), i));
 		}
 		tg.join_all();
 	}

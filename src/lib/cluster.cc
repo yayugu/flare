@@ -223,7 +223,7 @@ int cluster::startup_index(coordinator* coord, key_resolver::type key_resolver_t
 		t->trigger(h);
 	}
 
-	this->_coordinator->set_update_handler(bind(&cluster::_update, this));
+	this->_coordinator->set_update_handler(boost::bind(&cluster::_update, this));
 
 	return 0;
 }
