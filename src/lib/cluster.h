@@ -98,7 +98,7 @@ public:
 		int parse(const char* p);
 
 	private:
-		friend class serialization::access;
+		friend class boost::serialization::access;
 		template<class T> void serialize(T& ar, const unsigned int node_map_version) {
 			ar & BOOST_SERIALIZATION_NVP(node_server_name);
 			ar & BOOST_SERIALIZATION_NVP(node_server_port);
