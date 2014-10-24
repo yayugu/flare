@@ -18,7 +18,6 @@
 #define ZHANDLE_SOCK(x) (*(reinterpret_cast<int*>(x)))
 
 using namespace std;
-using namespace boost;
 using namespace gree::flare;
 
 namespace test_zookeeper_lock {

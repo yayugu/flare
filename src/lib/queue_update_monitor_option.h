@@ -13,7 +13,6 @@
 #include "thread_queue.h"
 
 using namespace std;
-using namespace boost;
 
 namespace gree {
 namespace flare {
